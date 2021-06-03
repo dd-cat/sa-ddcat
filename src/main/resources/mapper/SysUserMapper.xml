@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddcat.mapper.SysUserMapper">
+
+    <select id="page" resultType="UserPageResponse">
+        SELECT
+        a.id,
+        a.account,
+        a.username,
+        b.name dept_name,
+        (select group_concat(d.name) from sys_user_role c left join sys_role d on c.role_id=d.id WHERE
+        find_in_set(c.user_id,a.id)) role_name
+        FROM sys_user a
+        LEFT JOIN sys_dept b ON a.dept_id = b.id
+        WHERE a.flag = 0
+        <if test="r.account != null and r.account != ''">
+            AND a.account LIKE "%"#{r.account}"%"
+        </if>
+        <if test="r.name != null and r.name != ''">
+            AND a.name LIKE "%"#{r.name}"%"
+        </if>
+        <if test="r.mobile != null and r.mobile != ''">
+            AND a.mobile LIKE "%"#{r.mobile}"%"
+        </if>
+        <if test="!ids.isEmpty()">
+            AND a.dept_id IN (
+            <foreach collection="ids" item="id" separator=",">
+                ${id}
+            </foreach>
+            )
+        </if>
+    </select>
+</mapper>

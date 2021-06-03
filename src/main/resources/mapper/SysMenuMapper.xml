@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddcat.mapper.SysMenuMapper">
+    <!--通过角色查询菜单信息-->
+    <select id="listPermissionByRoleId" resultType="SysMenu">
+        select m.*
+        from sys_menu m
+                 left join sys_role_menu rm on m.id = rm.menu_id
+        where m.flag = 0
+          and rm.role_id = #{roleid}
+    </select>
+</mapper>
