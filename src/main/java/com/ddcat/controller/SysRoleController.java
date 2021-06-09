@@ -24,6 +24,17 @@ public class SysRoleController {
     private final SysRoleService service;
 
     /**
+     * 根据ID查询单个
+     *
+     * @param id -
+     */
+    @Log("角色根据ID查询单个")
+    @GetMapping("{id}")
+    public SysRole getById(@PathVariable long id) {
+        return service.getById(id);
+    }
+
+    /**
      * 保存or修改
      *
      * @param r -

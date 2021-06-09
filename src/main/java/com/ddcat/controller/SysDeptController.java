@@ -1,13 +1,13 @@
 package com.ddcat.controller;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.SysDept;
-import com.ddcat.entity.common.PageEntity;
 import com.ddcat.entity.vo.dept.DeptPageRequest;
-import com.ddcat.entity.vo.dept.DeptPageResponse;
 import com.ddcat.entity.vo.dept.DeptSaveRequest;
 import com.ddcat.service.SysDeptService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,18 +17,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 组织
+ * 部门
  *
  * @author dd-cat
  */
 @RequestMapping("dept")
 @RestController
+@RequiredArgsConstructor
 public class SysDeptController {
 
     private final SysDeptService service;
 
-    public SysDeptController(SysDeptService service) {
-        this.service = service;
+    /**
+     * 根据ID查询单个
+     *
+     * @param id -
+     */
+    @Log("部门根据ID查询单个")
+    @GetMapping("{id}")
+    public SysDept getById(@PathVariable long id) {
+        return service.getById(id);
     }
 
     /**
@@ -63,7 +71,7 @@ public class SysDeptController {
      */
     @Log("组织分页查询")
     @PostMapping("page")
-    public PageEntity<DeptPageResponse> page(@RequestBody DeptPageRequest r) {
+    public IPage<SysDept> page(@RequestBody DeptPageRequest r) {
         return service.page(r);
     }
 

@@ -1,13 +1,13 @@
 package com.ddcat.entity.vo.dept;
 
-import com.ddcat.entity.common.PageQuery;
+import com.ddcat.entity.common.Search;
 import lombok.Data;
 
 /**
  * @author dd-cat
  */
 @Data
-public class DeptPageRequest extends PageQuery {
+public class DeptPageRequest extends Search {
 
     /**
      * 父节点ID

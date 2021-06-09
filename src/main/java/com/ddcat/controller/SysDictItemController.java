@@ -7,6 +7,7 @@ import com.ddcat.entity.SysDictItem;
 import com.ddcat.entity.vo.dict.DictItemSaveRequest;
 import com.ddcat.entity.vo.dict.DictItemUpdateRequest;
 import com.ddcat.service.SysDictItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,20 @@ import java.util.List;
  */
 @RequestMapping("dict/item")
 @RestController
+@RequiredArgsConstructor
 public class SysDictItemController {
 
     private final SysDictItemService service;
 
-    public SysDictItemController(SysDictItemService service) {
-        this.service = service;
+    /**
+     * 查询单个
+     *
+     * @param id -
+     */
+    @Log("字典项根据ID查询单个")
+    @GetMapping("{id}")
+    public SysDictItem getById(@PathVariable long id) {
+        return service.getById(id);
     }
 
     /**

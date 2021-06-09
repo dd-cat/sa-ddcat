@@ -1,11 +1,10 @@
 package com.ddcat.service;
 
 import cn.hutool.core.lang.tree.Tree;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.SysDept;
-import com.ddcat.entity.common.PageEntity;
 import com.ddcat.entity.vo.dept.DeptPageRequest;
-import com.ddcat.entity.vo.dept.DeptPageResponse;
 import com.ddcat.entity.vo.dept.DeptSaveRequest;
 
 import java.util.List;
@@ -35,6 +34,6 @@ public interface SysDeptService extends IService<SysDept> {
      * @param r -
      * @return -
      */
-    PageEntity<DeptPageResponse> page(DeptPageRequest r);
+    IPage<SysDept> page(DeptPageRequest r);
 
 }

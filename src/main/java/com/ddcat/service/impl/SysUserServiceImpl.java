@@ -1,6 +1,7 @@
 package com.ddcat.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,10 +12,13 @@ import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.SysMenu;
 import com.ddcat.entity.SysRole;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.common.TreeBaseEntity;
 import com.ddcat.entity.vo.user.*;
+import com.ddcat.exception.BusinessException;
+import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.mapper.SysUserMapper;
-import com.ddcat.service.*;
+import com.ddcat.service.SysMenuService;
+import com.ddcat.service.SysRoleService;
+import com.ddcat.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +40,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Value("${password:e10adc3949ba59abbe56e057f20f883e}")
     private String password;
 
-    private final SysDeptService deptService;
+    private final SysDeptMapper deptMapper;
     private final SysRoleService roleService;
     private final SysMenuService menuService;
-    private final SysLogService logService;
 
     @Override
     public void saveOrUpdate(UserSaveRequest r) {
@@ -59,25 +62,32 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public IPage<UserPageResponse> page(UserPageRequest r) {
         List<Long> ids = new ArrayList<>();
-        Long parentId = r.getDeptId();
-        if (parentId != null) {
-            TreeBaseEntity.recursionTreeId(parentId, ids, deptService.list());
-            ids.add(parentId);
+        Long deptId = r.getDeptId();
+        if (deptId != null) {
+            deptMapper.selectTreeId(deptId);
         }
         return baseMapper.page(new Page<>(r.getCurrent(), r.getSize()), r, ids);
     }
 
     @Override
-    public UserLoginResponse login(UserLoginRequest r) throws Exception {
-        LambdaQueryWrapper<SysUser> query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getAccount()), SysUser::getAccount, r.getAccount());
+    public UserLoginResponse login(UserLoginRequest r) {
+        LambdaQueryWrapper<SysUser> query;
+        boolean number = NumberUtil.isNumber(r.getAccount());
+        if (number) {
+            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getAccount()), SysUser::getMobile, r.getAccount());
+        } else {
+            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getAccount()), SysUser::getAccount, r.getAccount());
+        }
         SysUser entity = baseMapper.selectOne(query);
         // 用户不存在
         if (entity == null) {
-            throw new Exception("用户不存在！");
+            throw new BusinessException("用户不存在！");
         }
-        String md5Str = SecureUtil.md5(r.getPassword());
-        if (!entity.getPassword().equals(md5Str)) {
-            throw new Exception("密码输入错误");
+        if (!number) {
+            String md5Str = SecureUtil.md5(r.getPassword());
+            if (!entity.getPassword().equals(md5Str)) {
+                throw new BusinessException("密码输入错误");
+            }
         }
         Set<String> permissions = new HashSet<>();
         //通过用户角色ID 获取用户权限列表
@@ -92,7 +102,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         //登录
         StpUtil.setLoginId(entity.getId());
         StpUtil.getSession().setAttribute("user", entity);
-        StpUtil.getSession().setAttribute("permissions", new ArrayList<>(permissions));
         return new UserLoginResponse(entity, new ArrayList<>(permissions), StpUtil.getTokenInfo());
     }
 }

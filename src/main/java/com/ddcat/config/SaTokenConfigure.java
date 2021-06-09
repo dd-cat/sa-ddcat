@@ -6,13 +6,14 @@ import cn.dev33.satoken.router.SaRouterUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import com.ddcat.entity.common.Result;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * [Sa-Token 权限认证] 配置类
  *
  * @author kong
  */
-//@Configuration
+@Configuration
 public class SaTokenConfigure {
 
     /**

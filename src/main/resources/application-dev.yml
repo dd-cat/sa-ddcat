@@ -1,30 +1,4 @@
-# https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-files
 spring:
-  # sa-token配置
-  sa-token:
-    # token前缀
-    tokenPrefix: Bearer
-    # token名称 (同时也是cookie名称)
-    token-name: token
-    # token有效期，单位s 默认30天, -1代表永不过期
-    timeout: 2592000
-    # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
-    activity-timeout: -1
-    # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
-    allow-concurrent-login: false
-    # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
-    is-share: false
-    # token风格
-    token-style: uuid
-    # 是否输出操作日志
-    is-log: false
-    # 关闭 字符画打印
-    isV: false
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-    # 返回给前端的JSON 去除null值属性
-    default-property-inclusion: non_null
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.164.128:3306/ddcat?${mysql-param}
@@ -49,28 +23,6 @@ spring:
     password:
     # 连接超时时间 毫秒
     timeout: 1000
-mybatis-plus:
-  global-config:
-    # 关闭MP3.0自带的banner
-    banner: false
-    db-config:
-      #主键类型 默认使用雪花ID
-      id-type: AUTO
-      insert-strategy: not_null
-      update-strategy: not_null
-      select-strategy: not_empty
-      # 逻辑删除实体字段名 或在实体属性添加@TableLogic
-      logic-delete-field: flag
-      # 逻辑删除全局值（1表示已删除，这也是Mybatis Plus的默认配置）
-      logic-delete-value: 1
-      # 逻辑未删除全局值（0表示未删除，这也是Mybatis Plus的默认配置）
-      logic-not-delete-value: 0
-  configuration:
-    # 开启自动驼峰命名规则映射 表字段名`a_b`映射为Java属性`aB`
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.ddcat.entity
 # MySQL参数
 # useAffectedRows 使用受影响行数替代匹配行数返回
 # serverTimezone 默认UTC 时区

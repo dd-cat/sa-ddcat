@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.vo.user.*;
+import com.ddcat.entity.vo.user.UserPageRequest;
+import com.ddcat.entity.vo.user.UserPageResponse;
+import com.ddcat.entity.vo.user.UserSaveRequest;
 import com.ddcat.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +27,14 @@ public class SysUserController {
     private final SysUserService service;
 
     /**
-     * 用户登录
+     * 根据ID查询单个
+     *
+     * @param id -
      */
-    @Log("用户登录")
-    @PostMapping("login")
-    public UserLoginResponse login(@Valid @RequestBody UserLoginRequest r) throws Exception {
-        return service.login(r);
-    }
-
-    /**
-     * 退出登录
-     */
-    @Log("退出登录")
-    @RequestMapping("logout")
-    public void isLogin() {
-        StpUtil.logout();
+    @Log("用户根据ID查询单个")
+    @GetMapping("{id}")
+    public SysUser getById(@PathVariable long id) {
+        return service.getById(id);
     }
 
     /**
@@ -79,4 +74,5 @@ public class SysUserController {
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }
+
 }

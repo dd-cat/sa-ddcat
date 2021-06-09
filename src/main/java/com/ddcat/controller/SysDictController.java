@@ -9,6 +9,7 @@ import com.ddcat.entity.SysDict;
 import com.ddcat.entity.vo.dict.DictPageRequest;
 import com.ddcat.entity.vo.dict.DictSaveRequest;
 import com.ddcat.service.SysDictService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,12 +21,20 @@ import javax.validation.Valid;
  */
 @RequestMapping("dict")
 @RestController
+@RequiredArgsConstructor
 public class SysDictController {
 
     private final SysDictService service;
 
-    public SysDictController(SysDictService service) {
-        this.service = service;
+    /**
+     * 根据ID查询单个
+     *
+     * @param id -
+     */
+    @Log("字典根据ID查询单个")
+    @GetMapping("{id}")
+    public SysDict getById(@PathVariable long id) {
+        return service.getById(id);
     }
 
     /**

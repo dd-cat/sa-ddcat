@@ -3,8 +3,7 @@ package com.ddcat.controller;
 import cn.hutool.core.lang.tree.Tree;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.SysMenu;
-import com.ddcat.entity.vo.permission.PermissionGetResponse;
-import com.ddcat.entity.vo.permission.PermissionSaveRequest;
+import com.ddcat.entity.vo.menu.MenuSaveRequest;
 import com.ddcat.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +27,17 @@ public class SysMenuController {
     private final SysMenuService service;
 
     /**
+     * 根据ID查询单个
+     *
+     * @param id -
+     */
+    @Log("菜单根据ID查询单个")
+    @GetMapping("{id}")
+    public SysMenu getById(@PathVariable long id) {
+        return service.getById(id);
+    }
+
+    /**
      * 获取树形数据
      *
      * @return -
@@ -46,24 +56,10 @@ public class SysMenuController {
      */
     @Log("菜单保存")
     @PostMapping
-    public void save(@Valid @RequestBody PermissionSaveRequest r) {
+    public void save(@Valid @RequestBody MenuSaveRequest r) {
         SysMenu entity = new SysMenu();
         BeanUtils.copyProperties(r, entity);
         service.saveOrUpdate(entity);
-    }
-
-    /**
-     * 获取
-     *
-     * @return -
-     */
-    @Log("菜单获取")
-    @GetMapping("{id}")
-    public PermissionGetResponse get(@PathVariable long id) {
-        PermissionGetResponse result = new PermissionGetResponse();
-        SysMenu entity = service.getById(id);
-        BeanUtils.copyProperties(entity, result);
-        return result;
     }
 
     /**

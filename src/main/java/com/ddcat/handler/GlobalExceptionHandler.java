@@ -1,6 +1,7 @@
 package com.ddcat.handler;
 
 import com.ddcat.entity.common.Result;
+import com.ddcat.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,17 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    /**
+     * 业务异常
+     */
+    @ExceptionHandler(BusinessException.class)
+    public Result<String> businessException(BusinessException e) {
+        Result<String> r = new Result<>();
+        r.setCode(e.getCode());
+        r.setMsg(e.getMessage());
+        return r;
+    }
 
     /**
      * 校验错误拦截处理
@@ -57,7 +69,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<String> handleException(Exception e) {
-        log.error("程序异常：" + e.getMessage(), e);
         return Result.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 }

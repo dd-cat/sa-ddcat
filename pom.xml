@@ -19,6 +19,7 @@
         <hutool.version>5.6.4</hutool.version>
         <lombok.version>1.18.20</lombok.version>
         <sa-token.version>1.19.0</sa-token.version>
+        <easypoi.version>4.2.0</easypoi.version>
     </properties>
 
     <dependencies>
@@ -79,6 +80,12 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-dao-redis-jackson</artifactId>
             <version>${sa-token.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <version>${easypoi.version}</version>
         </dependency>
     </dependencies>
 

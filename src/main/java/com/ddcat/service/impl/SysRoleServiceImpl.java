@@ -4,11 +4,9 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.constant.RoleConstant;
 import com.ddcat.entity.SysRole;
 import com.ddcat.entity.vo.role.RolePageRequest;
 import com.ddcat.entity.vo.role.RoleSaveRequest;
@@ -28,13 +26,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     @Override
     public IPage<SysRole> page(RolePageRequest r) {
         Page<SysRole> page = new Page<>(r.getCurrent(), r.getSize());
-        // 排序 null:不排序 0:名称 1:编码 2:备注
-        Byte sortField = r.getSortField();
-        Boolean isAsc = r.getIsAsc();
-        if (sortField != null && isAsc != null) {
-            String field = RoleConstant.SORT_FIELDS[sortField];
-            page.addOrder(isAsc ? OrderItem.asc(field) : OrderItem.desc(field));
-        }
         // 构建查询条件
         LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.<SysRole>lambdaQuery()
                 .like(StrUtil.isNotBlank(r.getName()), SysRole::getName, r.getName())

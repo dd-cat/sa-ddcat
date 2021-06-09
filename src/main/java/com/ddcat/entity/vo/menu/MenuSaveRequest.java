@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.permission;
+package com.ddcat.entity.vo.menu;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class PermissionSaveRequest {
+public class MenuSaveRequest {
 
     private Long id;
     /**

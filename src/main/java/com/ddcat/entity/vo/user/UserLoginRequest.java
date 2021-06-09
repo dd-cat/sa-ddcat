@@ -9,15 +9,13 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 public class UserLoginRequest {
-
     /**
-     * 账户
+     * 账号 可以是手机号、账号等
      */
-    @NotBlank(message = "账户必填")
+    @NotBlank(message = "账号必填")
     private String account;
     /**
      * 密码
      */
-    @NotBlank(message = "密码必填")
     private String password;
 }
