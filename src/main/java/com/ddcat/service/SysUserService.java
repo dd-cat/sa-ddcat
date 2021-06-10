@@ -5,6 +5,8 @@ import com.ddcat.base.BaseService;
 import com.ddcat.entity.SysUser;
 import com.ddcat.entity.vo.user.*;
 
+import java.util.List;
+
 /**
  * @author dd-cat
  */
@@ -32,4 +34,12 @@ public interface SysUserService extends BaseService<SysUser> {
      * @return -
      */
     UserLoginResponse login(UserLoginRequest r) throws Exception;
+
+    /**
+     * 在线用户列表
+     *
+     * @param r -
+     * @return -
+     */
+    List<UserOnlineListResponse> online(UserOnlineListRequest r);
 }

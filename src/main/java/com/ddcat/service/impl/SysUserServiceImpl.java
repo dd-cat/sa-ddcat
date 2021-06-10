@@ -16,18 +16,17 @@ import com.ddcat.entity.vo.user.*;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.mapper.SysUserMapper;
+import com.ddcat.netty.NettyHandler;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
+import io.netty.channel.ChannelId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -103,5 +102,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         StpUtil.setLoginId(entity.getId());
         StpUtil.getSession().setAttribute("user", entity);
         return new UserLoginResponse(entity, new ArrayList<>(permissions), StpUtil.getTokenInfo());
+    }
+
+    @Override
+    public List<UserOnlineListResponse> online(UserOnlineListRequest r) {
+        Map<ChannelId, Object> dataMap = NettyHandler.dataMap;
+        List<Object> ids = new ArrayList<Object>(dataMap.values());
+        if (ids.size() <= 0) {
+            ids.add(0);
+        }
+        return baseMapper.onlineList(r, ids);
     }
 }

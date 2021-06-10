@@ -30,4 +30,35 @@
             )
         </if>
     </select>
+    <select id="onlineList" resultType="com.ddcat.entity.vo.user.UserOnlineListResponse">
+        SELECT id,username,'在线' status FROM sys_user
+        where flag = 0
+        AND id IN (
+        <foreach collection="ids" item="id" separator=",">
+            ${id}
+        </foreach>
+        <if test="r.ids !=null and r.ids.length > 0">
+            AND id IN (
+            <foreach collection="r.ids" item="id" separator=",">
+                ${id}
+            </foreach>
+        </if>
+        )
+        <if test="r.flag != 1">
+            UNION
+            SELECT id,username,'离线' status FROM sys_user
+            WHERE flag = 0
+            AND id NOT IN (
+            <foreach collection="ids" item="id" separator=",">
+                ${id}
+            </foreach>
+            <if test="r.ids !=null and r.ids.length > 0">
+                AND id IN (
+                <foreach collection="r.ids" item="id" separator=",">
+                    ${id}
+                </foreach>
+            </if>
+            )
+        </if>
+    </select>
 </mapper>
