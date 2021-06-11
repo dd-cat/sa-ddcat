@@ -1,5 +1,6 @@
 package com.ddcat.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
@@ -31,8 +32,11 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict>
         SysDict entity = new SysDict();
         BeanUtils.copyProperties(r, entity);
         saveOrUpdate(entity);
+        if (r.getId() != null && StrUtil.isNotBlank(r.getType())) {
+            //修改子集type名称
+            dictItemMapper.updateBatchById(r.getId(), r.getType());
+        }
     }
-
 
     @Override
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)

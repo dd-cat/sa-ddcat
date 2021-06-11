@@ -16,19 +16,16 @@
             )
         </if>
     </select>
+    <select id="selectTreeId" resultType="java.lang.Long">
+        SELECT id FROM (
+            SELECT t1.id,
+            IF(FIND_IN_SET(parent_id, @pids) > 0, @pids := CONCAT(@pids, ',', id), 0) AS ischild
+            FROM (
+            SELECT id,parent_id FROM sys_dept t WHERE t.flag = 0 ORDER BY parent_id, id
+            ) t1,
+            (SELECT @pids := #{deptId}) t2
+            ) t3 WHERE ischild != 0
 
-    <select id="list" resultType="DeptPageResponse">
-        SELECT id,parent_id, name,avatar,code FROM sys_dept
-        WHERE state = 0
-        <if test="r.name != null and r.name != ''">
-            AND aname LIKE "%"#{name}"%"
-        </if>
-        <if test="!ids.isEmpty()">
-            AND id IN (
-            <foreach collection="ids" item="id" separator=",">
-                ${id}
-            </foreach>
-            )
-        </if>
     </select>
+
 </mapper>
