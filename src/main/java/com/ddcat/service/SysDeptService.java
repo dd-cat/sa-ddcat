@@ -2,7 +2,7 @@ package com.ddcat.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.ddcat.base.BaseService;
 import com.ddcat.entity.SysDept;
 import com.ddcat.entity.vo.dept.DeptPageRequest;
 import com.ddcat.entity.vo.dept.DeptSaveRequest;
@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * @author dd-cat
  */
-public interface SysDeptService extends IService<SysDept> {
+public interface SysDeptService extends BaseService<SysDept> {
     /**
      * 获取树形数据
      *

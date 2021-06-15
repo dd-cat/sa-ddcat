@@ -105,12 +105,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public List<UserOnlineListResponse> online(UserOnlineListRequest r) {
+    public IPage<UserOnlineListResponse> online(UserOnlineListRequest r) {
         Map<String, String> dataMap = NettyHandler.dataMap;
         List<String> ids = new ArrayList<>(dataMap.values());
         if (ids.size() <= 0) {
             ids.add("0");
         }
-        return baseMapper.onlineList(r, ids);
+        return baseMapper.onlinePage(new Page<>(r.getCurrent(), r.getSize()), r, ids);
     }
 }

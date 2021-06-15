@@ -30,7 +30,8 @@
             )
         </if>
     </select>
-    <select id="onlineList" resultType="com.ddcat.entity.vo.user.UserOnlineListResponse">
+
+    <select id="onlinePage" resultType="com.ddcat.entity.vo.user.UserOnlineListResponse">
         SELECT id,username,'在线' status FROM sys_user
         where flag = 0
         AND id IN (

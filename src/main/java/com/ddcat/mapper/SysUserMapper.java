@@ -31,5 +31,5 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
      * @param r -
      * @return -
      */
-    List<UserOnlineListResponse> onlineList(UserOnlineListRequest r, List<String> ids);
+    IPage<UserOnlineListResponse> onlinePage(Page<?> page, @Param("r") UserOnlineListRequest r, @Param("ids") List<String> ids);
 }

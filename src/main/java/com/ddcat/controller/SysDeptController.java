@@ -1,5 +1,7 @@
 package com.ddcat.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
@@ -35,6 +37,7 @@ public class SysDeptController {
      */
     @Log("部门根据ID查询单个")
     @GetMapping("{id}")
+    @SaCheckLogin
     public SysDept getById(@PathVariable long id) {
         return service.getById(id);
     }
@@ -46,6 +49,7 @@ public class SysDeptController {
      */
     @Log("组织获取树形数据")
     @GetMapping("tree")
+    @SaCheckLogin
     public List<Tree<Long>> tree() {
         Set<SysDept> all = new HashSet<>(service.list());
         return service.tree(all);
@@ -58,6 +62,7 @@ public class SysDeptController {
      */
     @Log("组织保存or修改")
     @PostMapping
+    @SaCheckPermission({"sys:dept:add", "sys:dept:edit"})
     public void save(@Valid @RequestBody DeptSaveRequest r) {
         SysDept entity = new SysDept();
         BeanUtils.copyProperties(r, entity);
@@ -71,6 +76,7 @@ public class SysDeptController {
      */
     @Log("组织分页查询")
     @PostMapping("page")
+    @SaCheckLogin
     public IPage<SysDept> page(@RequestBody DeptPageRequest r) {
         return service.page(r);
     }
@@ -82,7 +88,10 @@ public class SysDeptController {
      */
     @Log("组织删除")
     @DeleteMapping("{id}")
+    @SaCheckPermission("sys:dept:del")
     public void delete(@PathVariable long id) {
-        service.removeById(id);
+        SysDept entity = new SysDept();
+        entity.setId(id);
+        service.deleteByIdWithFill(entity);
     }
 }

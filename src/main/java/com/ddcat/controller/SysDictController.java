@@ -1,5 +1,7 @@
 package com.ddcat.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -33,6 +35,7 @@ public class SysDictController {
      */
     @Log("字典根据ID查询单个")
     @GetMapping("{id}")
+    @SaCheckLogin
     public SysDict getById(@PathVariable long id) {
         return service.getById(id);
     }
@@ -45,7 +48,8 @@ public class SysDictController {
      */
     @Log("字典分页查询")
     @PostMapping("page")
-    IPage<SysDict> page(@Valid @RequestBody DictPageRequest r) {
+    @SaCheckLogin
+    public IPage<SysDict> page(@Valid @RequestBody DictPageRequest r) {
         return service.page(new Page<>(r.getCurrent(), r.getSize()), Wrappers.<SysDict>lambdaQuery().like(StrUtil.isNotBlank(r.getName()), SysDict::getName, r.getName()));
     }
 
@@ -56,7 +60,8 @@ public class SysDictController {
      */
     @Log("字典保存or修改")
     @PostMapping
-    void save(@Valid @RequestBody DictSaveRequest r) {
+    @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
+    public void saveOrUpdate(@Valid @RequestBody DictSaveRequest r) {
         service.save(r);
     }
 
@@ -67,7 +72,10 @@ public class SysDictController {
      */
     @Log("字典删除")
     @DeleteMapping("{id}")
-    void delete(@PathVariable long id) {
-        service.removeById(id);
+    @SaCheckPermission("sys:dict:del")
+    public void delete(@PathVariable long id) {
+        SysDict entity = new SysDict();
+        entity.setId(id);
+        service.deleteByIdWithFill(entity);
     }
 }

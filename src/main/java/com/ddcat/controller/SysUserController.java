@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 用户
@@ -80,16 +79,15 @@ public class SysUserController {
     }
 
     /**
-     * 在线用户列表
+     * 在线离线用户列表
      *
      * @param r -
      * @return -
      */
     @PostMapping("online")
     @SaCheckLogin
-    public List<UserOnlineListResponse> online(@RequestBody UserOnlineListRequest r) {
+    public IPage<UserOnlineListResponse> online(@RequestBody UserOnlineListRequest r) {
         return service.online(r);
-
     }
 
 }

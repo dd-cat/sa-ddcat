@@ -1,6 +1,6 @@
 package com.ddcat.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ddcat.base.SuperMapper;
 import com.ddcat.entity.SysDept;
 import com.ddcat.entity.vo.dept.DeptPageRequest;
 import com.ddcat.entity.vo.dept.DeptPageResponse;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author dd-cat
  */
-public interface SysDeptMapper extends BaseMapper<SysDept> {
+public interface SysDeptMapper extends SuperMapper<SysDept> {
     /**
      * 获取sort值
      *

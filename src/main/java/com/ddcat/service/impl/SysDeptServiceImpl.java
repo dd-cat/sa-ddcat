@@ -6,7 +6,7 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.SysDept;
 import com.ddcat.entity.vo.dept.DeptPageRequest;
 import com.ddcat.entity.vo.dept.DeptSaveRequest;
@@ -22,7 +22,7 @@ import java.util.Set;
  * @author dd-cat
  */
 @Service
-public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
+public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
 
     @Override
     public List<Tree<Long>> tree(Set<SysDept> all) {

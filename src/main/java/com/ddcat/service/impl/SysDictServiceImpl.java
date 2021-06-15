@@ -2,7 +2,7 @@ package com.ddcat.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.SysDict;
 import com.ddcat.entity.SysDictItem;
@@ -10,6 +10,7 @@ import com.ddcat.entity.vo.dict.DictSaveRequest;
 import com.ddcat.mapper.SysDictItemMapper;
 import com.ddcat.mapper.SysDictMapper;
 import com.ddcat.service.SysDictService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,11 @@ import org.springframework.stereotype.Service;
  * @author dd-cat
  */
 @Service
-public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict>
-        implements SysDictService {
+@RequiredArgsConstructor
+public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     private final SysDictItemMapper dictItemMapper;
-
-    public SysDictServiceImpl(SysDictItemMapper dictItemMapper) {
-        this.dictItemMapper = dictItemMapper;
-    }
-
+    
     @Override
     public void save(DictSaveRequest r) {
         SysDict entity = new SysDict();

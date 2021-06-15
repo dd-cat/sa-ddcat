@@ -5,8 +5,6 @@ import com.ddcat.base.BaseService;
 import com.ddcat.entity.SysUser;
 import com.ddcat.entity.vo.user.*;
 
-import java.util.List;
-
 /**
  * @author dd-cat
  */
@@ -41,5 +39,5 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param r -
      * @return -
      */
-    List<UserOnlineListResponse> online(UserOnlineListRequest r);
+    IPage<UserOnlineListResponse> online(UserOnlineListRequest r);
 }

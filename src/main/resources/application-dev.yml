@@ -29,3 +29,7 @@ spring:
 # allowMultiQueries 默认false SQL语句可携带分号
 # allowPublicKeyRetrieval 默认false 允许客户端从服务器获取公钥
 mysql-param: useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&failOverReadOnly=false&useAffectedRows=true&serverTimezone=GMT&allowMultiQueries=true&allowPublicKeyRetrieval=true
+# 测试环境开启日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
