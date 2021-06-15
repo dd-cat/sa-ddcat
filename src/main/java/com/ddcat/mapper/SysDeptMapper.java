@@ -2,9 +2,6 @@ package com.ddcat.mapper;
 
 import com.ddcat.base.SuperMapper;
 import com.ddcat.entity.SysDept;
-import com.ddcat.entity.vo.dept.DeptPageRequest;
-import com.ddcat.entity.vo.dept.DeptPageResponse;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -30,17 +27,6 @@ public interface SysDeptMapper extends SuperMapper<SysDept> {
             "limit 1" +
             "</script>")
     Integer getSort(long parentId);
-
-
-    /**
-     * 查询数据
-     *
-     * @param r   -
-     * @param ids -
-     * @return -
-     */
-    List<DeptPageResponse> list(@Param("r") DeptPageRequest r, @Param("ids") List<Long> ids);
-
 
     /**
      * 获取当前节点下所有节点ID

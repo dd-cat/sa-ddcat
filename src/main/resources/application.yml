@@ -42,4 +42,4 @@ mybatis-plus:
     # 开启自动驼峰命名规则映射 表字段名`a_b`映射为Java属性`aB`
     map-underscore-to-camel-case: true
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.ddcat.entity
+  type-aliases-package: com.ddcat.entity,com.ddcat.entity.**
