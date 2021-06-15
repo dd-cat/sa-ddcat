@@ -17,17 +17,12 @@ public class Result<T> implements Serializable {
     /**
      * 状态码
      */
-    private int code;
+    private long code;
 
     /**
      * 消息内容
      */
     private String msg;
-
-    /**
-     * 时间戳
-     */
-    private long time;
 
     /**
      * 业务数据
@@ -51,7 +46,6 @@ public class Result<T> implements Serializable {
         apiResult.setCode(code);
         apiResult.setData(data);
         apiResult.setMsg(msg);
-        apiResult.setTime(System.currentTimeMillis());
         return apiResult;
     }
 

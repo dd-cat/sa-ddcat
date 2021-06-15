@@ -2,6 +2,7 @@ package com.ddcat.handler;
 
 import com.ddcat.entity.common.Result;
 import com.ddcat.exception.BusinessException;
+import com.ddcat.menu.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,15 @@ public class GlobalExceptionHandler {
         Result<String> r = new Result<>();
         r.setCode(e.getCode());
         r.setMsg(e.getMessage());
+        return r;
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public Result<String> catchRuntimeException(RuntimeException e) {
+        e.printStackTrace();
+        Result<String> r = new Result<>();
+        r.setCode(ResultEnum.SUCCESS.getCode());
+        r.setMsg(ResultEnum.FAIL.getMessage());
         return r;
     }
 

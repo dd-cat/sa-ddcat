@@ -13,7 +13,7 @@ public interface NettyConstant {
     /**
      * 监听端口
      */
-    Integer PORT = 8081;
+    Integer PORT = 12345;
     /**
      * 请求路径
      */

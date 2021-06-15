@@ -16,11 +16,11 @@ import com.ddcat.entity.vo.user.*;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.mapper.SysUserMapper;
+import com.ddcat.menu.ResultEnum;
 import com.ddcat.netty.NettyHandler;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
-import io.netty.channel.ChannelId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,12 +80,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         SysUser entity = baseMapper.selectOne(query);
         // 用户不存在
         if (entity == null) {
-            throw new BusinessException("用户不存在！");
+            throw new BusinessException(ResultEnum.S000001);
         }
         if (!number) {
             String md5Str = SecureUtil.md5(r.getPassword());
             if (!entity.getPassword().equals(md5Str)) {
-                throw new BusinessException("密码输入错误");
+                throw new BusinessException(ResultEnum.S000002);
             }
         }
         Set<String> permissions = new HashSet<>();
@@ -106,10 +106,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public List<UserOnlineListResponse> online(UserOnlineListRequest r) {
-        Map<ChannelId, Object> dataMap = NettyHandler.dataMap;
-        List<Object> ids = new ArrayList<Object>(dataMap.values());
+        Map<String, String> dataMap = NettyHandler.dataMap;
+        List<String> ids = new ArrayList<>(dataMap.values());
         if (ids.size() <= 0) {
-            ids.add(0);
+            ids.add("0");
         }
         return baseMapper.onlineList(r, ids);
     }

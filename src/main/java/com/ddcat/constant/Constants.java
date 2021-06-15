@@ -26,4 +26,8 @@ public interface Constants {
      */
     String DEFAULT_FAIL_MESSAGE = "Error!";
 
+    /**
+     * 用户默认ID 用来无需登录接口默认用户用
+     */
+    long USER_ID = 0L;
 }

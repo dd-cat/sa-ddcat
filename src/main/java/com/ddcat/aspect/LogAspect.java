@@ -2,6 +2,7 @@ package com.ddcat.aspect;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
+import com.ddcat.constant.Constants;
 import com.ddcat.entity.SysLog;
 import com.ddcat.service.SysLogService;
 import lombok.SneakyThrows;
@@ -48,7 +49,7 @@ public class LogAspect {
             Long endTime = System.currentTimeMillis();
             l.setTime(endTime - startTime);
             l.setCreateTime(LocalDateTime.now());
-            l.setCreateUserId(StpUtil.getLoginIdAsLong());
+            l.setCreateUserId(StpUtil.getLoginId(Constants.USER_ID));
             logService.save(l);
         }
         return obj;

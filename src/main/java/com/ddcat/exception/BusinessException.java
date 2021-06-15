@@ -1,5 +1,6 @@
 package com.ddcat.exception;
 
+import com.ddcat.menu.ResultEnum;
 import lombok.Getter;
 
 /**
@@ -9,21 +10,12 @@ import lombok.Getter;
  */
 @Getter
 public class BusinessException extends RuntimeException {
-    private Integer code;
+    private long code;
 
     private String message;
 
-    public BusinessException(String message) {
-        this.message = message;
-    }
-
-    public BusinessException(String message, Integer code) {
-        this.message = message;
-        this.code = code;
-    }
-
-    public BusinessException(String message, Throwable e) {
-        super(message, e);
-        this.message = message;
+    public BusinessException(ResultEnum resultEnum) {
+        this.code = resultEnum.getCode();
+        this.message = resultEnum.getMessage();
     }
 }

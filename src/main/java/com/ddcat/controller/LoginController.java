@@ -4,8 +4,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.vo.user.UserLoginRequest;
 import com.ddcat.entity.vo.user.UserLoginResponse;
-import com.ddcat.entity.vo.user.UserOnlineListRequest;
-import com.ddcat.entity.vo.user.UserOnlineListResponse;
 import com.ddcat.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author dd-cat
@@ -43,15 +40,4 @@ public class LoginController {
         StpUtil.logout();
     }
 
-    /**
-     * 在线用户列表
-     *
-     * @param r -
-     * @return -
-     */
-    @PostMapping("online")
-    public List<UserOnlineListResponse> online(@RequestBody UserOnlineListRequest r) {
-        return service.online(r);
-
-    }
 }

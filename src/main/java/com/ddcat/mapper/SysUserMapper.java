@@ -31,5 +31,5 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
      * @param r -
      * @return -
      */
-    List<UserOnlineListResponse> onlineList(UserOnlineListRequest r, List<Object> ids);
+    List<UserOnlineListResponse> onlineList(UserOnlineListRequest r, List<String> ids);
 }
