@@ -1,9 +1,9 @@
 package com.ddcat.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.vo.user.UserLoginRequest;
-import com.ddcat.entity.vo.user.UserLoginResponse;
 import com.ddcat.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RequestMapping("login")
 @RestController
 @RequiredArgsConstructor
-public class LoginController {
+public class SysLoginController {
     private final SysUserService service;
 
     /**
@@ -27,7 +27,7 @@ public class LoginController {
      */
     @Log("用户认证")
     @PostMapping("auth")
-    public UserLoginResponse login(@Valid @RequestBody UserLoginRequest r) throws Exception {
+    public SaTokenInfo login(@Valid @RequestBody UserLoginRequest r) {
         return service.login(r);
     }
 

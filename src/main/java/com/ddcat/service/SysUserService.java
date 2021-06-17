@@ -1,5 +1,6 @@
 package com.ddcat.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
 import com.ddcat.entity.SysUser;
@@ -31,7 +32,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param r -
      * @return -
      */
-    UserLoginResponse login(UserLoginRequest r) throws Exception;
+    SaTokenInfo login(UserLoginRequest r);
 
     /**
      * 在线用户列表
@@ -40,4 +41,11 @@ public interface SysUserService extends BaseService<SysUser> {
      * @return -
      */
     IPage<UserOnlineListResponse> online(UserOnlineListRequest r);
+
+    /**
+     * 当前登录用户信息
+     *
+     * @return -
+     */
+    UserLoginResponse info();
 }

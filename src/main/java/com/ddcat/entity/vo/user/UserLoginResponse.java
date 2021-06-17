@@ -1,6 +1,5 @@
 package com.ddcat.entity.vo.user;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import com.ddcat.entity.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class UserLoginResponse {
      */
     private List<String> permissions;
     /**
-     * token信息
+     * 角色集合
      */
-    private SaTokenInfo tokenInfo;
+    private List<String> roles;
 }

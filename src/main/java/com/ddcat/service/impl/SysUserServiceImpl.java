@@ -1,5 +1,6 @@
 package com.ddcat.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
@@ -70,7 +71,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public UserLoginResponse login(UserLoginRequest r) {
+    public SaTokenInfo login(UserLoginRequest r) {
         LambdaQueryWrapper<SysUser> query;
         boolean number = NumberUtil.isNumber(r.getKey());
         if (number) {
@@ -89,20 +90,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
                 throw new BusinessException(ResultEnum.S000002);
             }
         }
-        Set<String> permissions = new HashSet<>();
-        //通过用户角色ID 获取用户权限列表
-        List<Long> roleIds = roleService.findRolesByUserId(entity.getId()).stream().map(SysRole::getId)
-                .collect(Collectors.toList());
-        roleIds.forEach(roleId -> {
-            List<String> permissionList = menuService.findPermissionByRoleId(roleId).stream()
-                    .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
-                    .collect(Collectors.toList());
-            permissions.addAll(permissionList);
-        });
         //登录
         StpUtil.login(entity.getId());
-        StpUtil.getSession().setAttribute("user", entity);
-        return new UserLoginResponse(entity, new ArrayList<>(permissions), StpUtil.getTokenInfo());
+        return StpUtil.getTokenInfo();
     }
 
     @Override
@@ -113,5 +103,24 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             ids.add("0");
         }
         return baseMapper.onlinePage(new Page<>(r.getCurrent(), r.getSize()), r, ids);
+    }
+
+    @Override
+    public UserLoginResponse info() {
+        SysUser entity = this.getById(StpUtil.getLoginIdAsLong());
+        Set<String> permissions = new HashSet<>();
+        //通过用户角色ID 获取用户权限列表
+        List<SysRole> roles = roleService.findRolesByUserId(entity.getId());
+
+        List<String> roleCodes = roles.stream().map(SysRole::getCode).collect(Collectors.toList());
+
+        List<Long> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+        roleIds.forEach(roleId -> {
+            List<String> permissionList = menuService.findPermissionByRoleId(roleId).stream()
+                    .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
+                    .collect(Collectors.toList());
+            permissions.addAll(permissionList);
+        });
+        return new UserLoginResponse(entity, new ArrayList<>(permissions), roleCodes);
     }
 }

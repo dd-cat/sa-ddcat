@@ -26,6 +26,17 @@ public class SysUserController {
 
     private final SysUserService service;
 
+
+    /**
+     * 当前登录用户信息
+     */
+    @Log("当前登录用户信息")
+    @GetMapping("info")
+    @SaCheckLogin
+    public UserLoginResponse info() {
+        return service.info();
+    }
+
     /**
      * 分页查询
      *
