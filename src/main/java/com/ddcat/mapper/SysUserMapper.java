@@ -11,6 +11,7 @@ import com.ddcat.entity.vo.user.UserPageResponse;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dd-cat
@@ -31,5 +32,5 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
      * @param r -
      * @return -
      */
-    IPage<UserOnlineListResponse> onlinePage(Page<?> page, @Param("r") UserOnlineListRequest r, @Param("ids") List<String> ids);
+    IPage<UserOnlineListResponse> onlinePage(Page<?> page, @Param("r") UserOnlineListRequest r, @Param("ids") Set<String> ids);
 }

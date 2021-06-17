@@ -36,8 +36,7 @@ public class LoginController {
      */
     @Log("用户退出登录")
     @RequestMapping("logout")
-    public void isLogin() {
+    public void logout() {
         StpUtil.logout();
     }
-
 }

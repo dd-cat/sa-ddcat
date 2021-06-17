@@ -13,7 +13,7 @@ public class UserLoginRequest {
      * 账号 可以是手机号、账号等
      */
     @NotBlank(message = "账号必填")
-    private String account;
+    private String key;
     /**
      * 密码
      */

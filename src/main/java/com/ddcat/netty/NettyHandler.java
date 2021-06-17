@@ -1,6 +1,8 @@
 package com.ddcat.netty;
 
 import com.ddcat.constant.NettyConstant;
+import com.ddcat.constant.UserConstant;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,6 +10,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
+import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,9 +31,9 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     /**
-     * userId数据集合
+     * 存放用户与Chanel的对应信息
      */
-    public static Map<String, String> dataMap = new ConcurrentHashMap<>();
+    public static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -57,7 +60,9 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端断开连接：{}", ctx.channel().id());
-        dataMap.remove(ctx.channel().id().asShortText());
+        AttributeKey<String> key = AttributeKey.valueOf(UserConstant.USER_ID);
+        String userId = ctx.channel().attr(key).get();
+        userChannelMap.remove(userId);
         channels.remove(ctx.channel());
         super.channelInactive(ctx);
     }
@@ -114,8 +119,11 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         Map<String, String> params = getUrlParams(uri);
         log.info("客户端请求参数：{}", params);
         String userId = params.get("userId");
+        // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
+        AttributeKey<String> key = AttributeKey.valueOf(UserConstant.USER_ID);
+        ctx.channel().attr(key).setIfAbsent(userId);
 
-        dataMap.put(ctx.channel().id().asShortText(), userId);
+        userChannelMap.put(userId, ctx.channel());
         // 如果 URL 包含参数，需要处理
         if (uri.startsWith(NettyConstant.PATH)) {
             request.setUri(NettyConstant.PATH);

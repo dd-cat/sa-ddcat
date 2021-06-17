@@ -21,6 +21,7 @@ import com.ddcat.netty.NettyHandler;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
+import io.netty.channel.Channel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,11 +72,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public UserLoginResponse login(UserLoginRequest r) {
         LambdaQueryWrapper<SysUser> query;
-        boolean number = NumberUtil.isNumber(r.getAccount());
+        boolean number = NumberUtil.isNumber(r.getKey());
         if (number) {
-            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getAccount()), SysUser::getMobile, r.getAccount());
+            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getKey()), SysUser::getMobile, r.getKey());
         } else {
-            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getAccount()), SysUser::getAccount, r.getAccount());
+            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getKey()), SysUser::getAccount, r.getKey());
         }
         SysUser entity = baseMapper.selectOne(query);
         // 用户不存在
@@ -99,15 +100,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             permissions.addAll(permissionList);
         });
         //登录
-        StpUtil.setLoginId(entity.getId());
+        StpUtil.login(entity.getId());
         StpUtil.getSession().setAttribute("user", entity);
         return new UserLoginResponse(entity, new ArrayList<>(permissions), StpUtil.getTokenInfo());
     }
 
     @Override
     public IPage<UserOnlineListResponse> online(UserOnlineListRequest r) {
-        Map<String, String> dataMap = NettyHandler.dataMap;
-        List<String> ids = new ArrayList<>(dataMap.values());
+        Map<String, Channel> dataMap = NettyHandler.userChannelMap;
+        Set<String> ids = dataMap.keySet();
         if (ids.size() <= 0) {
             ids.add("0");
         }
