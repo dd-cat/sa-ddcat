@@ -1,5 +1,7 @@
 package com.ddcat.netty;
 
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ddcat.constant.NettyConstant;
 import com.ddcat.constant.UserConstant;
 import io.netty.channel.Channel;
@@ -31,7 +33,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     /**
-     * 存放用户与Chanel的对应信息
+     * 存放用户ID与Chanel的对应信息
      */
     public static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
 
@@ -118,12 +120,21 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         log.info("接收到客户端的握手包：{}", ctx.channel().id());
         Map<String, String> params = getUrlParams(uri);
         log.info("客户端请求参数：{}", params);
-        String userId = params.get("userId");
-        // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
-        AttributeKey<String> key = AttributeKey.valueOf(UserConstant.USER_ID);
-        ctx.channel().attr(key).setIfAbsent(userId);
+        String token = params.get("token");
 
-        userChannelMap.put(userId, ctx.channel());
+        String loginId = (String) StpUtil.getLoginIdByToken(token);
+        if (StrUtil.isNotBlank(loginId) && Long.parseLong(loginId) > 0) {
+            //如果之前有连接 先关闭 只保留一个在线用户
+            Channel channel = userChannelMap.get(loginId);
+            if (channel != null) {
+                channel.writeAndFlush(new CloseWebSocketFrame());
+            }
+            // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
+            AttributeKey<String> key = AttributeKey.valueOf(NettyConstant.USER_ID);
+            ctx.channel().attr(key).setIfAbsent(loginId);
+
+            userChannelMap.put(loginId, ctx.channel());
+        }
         // 如果 URL 包含参数，需要处理
         if (uri.startsWith(NettyConstant.PATH)) {
             request.setUri(NettyConstant.PATH);

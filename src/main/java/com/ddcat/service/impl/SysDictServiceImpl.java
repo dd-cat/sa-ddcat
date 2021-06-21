@@ -1,5 +1,6 @@
 package com.ddcat.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
@@ -11,7 +12,6 @@ import com.ddcat.mapper.SysDictItemMapper;
 import com.ddcat.mapper.SysDictMapper;
 import com.ddcat.service.SysDictService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +23,11 @@ import org.springframework.stereotype.Service;
 public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     private final SysDictItemMapper dictItemMapper;
-    
+
     @Override
     public void save(DictSaveRequest r) {
         SysDict entity = new SysDict();
-        BeanUtils.copyProperties(r, entity);
+        BeanUtil.copyProperties(r, entity);
         saveOrUpdate(entity);
         if (r.getId() != null && StrUtil.isNotBlank(r.getType())) {
             //修改子集type名称

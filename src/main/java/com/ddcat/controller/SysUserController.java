@@ -3,16 +3,21 @@ package com.ddcat.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.SysUser;
 import com.ddcat.entity.vo.user.*;
 import com.ddcat.service.SysUserService;
+import com.ddcat.util.ExcelUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 用户
@@ -99,6 +104,22 @@ public class SysUserController {
     @SaCheckLogin
     public IPage<UserOnlineListResponse> online(@RequestBody UserOnlineListRequest r) {
         return service.online(r);
+    }
+
+    /**
+     * 导入
+     *
+     * @param file excel文件
+     */
+    @PostMapping("import")
+    public void importData(MultipartFile file) throws IOException {
+        List<UserImportRequest> list = ExcelUtils.importExcel(file, 0, 1, UserImportRequest.class);
+        for (UserImportRequest r : list) {
+            SysUser entity = new SysUser();
+            BeanUtil.copyProperties(r, entity);
+            entity.setSex(Byte.valueOf(r.getSex()));
+            service.save(entity);
+        }
     }
 
 }

@@ -19,6 +19,10 @@ public class SysMenu extends BaseEntity {
      */
     private String name;
     /**
+     * VUE页面
+     */
+    private String component;
+    /**
      * 0:菜单 1:权限
      */
     private Byte type;

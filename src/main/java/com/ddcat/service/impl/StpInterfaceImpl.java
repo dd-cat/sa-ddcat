@@ -28,7 +28,7 @@ public class StpInterfaceImpl implements StpInterface {
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        if (StpUtil.TYPE.equals(loginType)) {
+        if (StpUtil.getLoginType().equals(loginType)) {
             Set<String> permissions = new HashSet<>();
             // 通过用户角色 ID 获取用户权限列表
             List<Long> roleIds = roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getId)
@@ -46,7 +46,7 @@ public class StpInterfaceImpl implements StpInterface {
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        if (StpUtil.TYPE.equals(loginType)) {
+        if (StpUtil.getLoginType().equals(loginType)) {
             return roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getCode).collect(Collectors.toList());
         }
         return null;

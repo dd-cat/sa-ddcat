@@ -1,5 +1,6 @@
 package com.ddcat.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
@@ -12,7 +13,6 @@ import com.ddcat.entity.vo.dept.DeptPageRequest;
 import com.ddcat.entity.vo.dept.DeptSaveRequest;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.service.SysDeptService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +23,6 @@ import java.util.Set;
  */
 @Service
 public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
-
     @Override
     public List<Tree<Long>> tree(Set<SysDept> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
@@ -37,7 +36,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
     @Override
     public void save(DeptSaveRequest r) {
         SysDept entity = new SysDept();
-        BeanUtils.copyProperties(r, entity);
+        BeanUtil.copyProperties(r, entity);
         // 新增则获取当前兄弟节点最后一个排序值加1作为sort值
         if (entity.getId() == null) {
             Integer sort = baseMapper.getSort(entity.getParentId());

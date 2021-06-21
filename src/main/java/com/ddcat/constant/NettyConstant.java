@@ -18,4 +18,8 @@ public interface NettyConstant {
      * 请求路径
      */
     String PATH = "/ws";
+    /**
+     * Netty 用户key
+     */
+    String USER_ID = "user_id";
 }

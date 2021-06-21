@@ -18,7 +18,7 @@ public interface SysRoleMapper extends SuperMapper<SysRole> {
      * @param roleId -
      * @return -
      */
-    @Delete("delete from role_permission where role_id = ${roleId}")
+    @Delete("delete from role_menu where role_id = ${roleId}")
     long deleteMenuById(long roleId);
 
     /**
@@ -29,7 +29,7 @@ public interface SysRoleMapper extends SuperMapper<SysRole> {
      * @return -
      */
     @Insert("<script>" +
-            "insert into role_permission(role_id, permission_id) value" +
+            "insert into role_menu(role_id, permission_id) value" +
             "<foreach collection='permissionIds' item='permissionId' separator=','>" +
             "(${roleId},${permissionId})" +
             "</foreach>" +

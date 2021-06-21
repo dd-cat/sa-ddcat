@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.SysMenu;
 import com.ddcat.entity.SysRole;
@@ -34,6 +35,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenu> 
             Map<String, Object> extra = new HashMap<>();
             extra.put("path", menu.getPath());
             extra.put("icon", menu.getIcon());
+            if (StrUtil.isNotBlank(menu.getComponent())) {
+                extra.put("component", menu.getComponent());
+            } else {
+                extra.put("component", "Layout");
+            }
             extra.put("permission", menu.getPermission());
             treeNode.setExtra(extra);
             nodeList.add(treeNode);

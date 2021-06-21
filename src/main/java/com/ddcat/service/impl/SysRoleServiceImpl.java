@@ -1,5 +1,6 @@
 package com.ddcat.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -12,7 +13,6 @@ import com.ddcat.entity.vo.role.RolePageRequest;
 import com.ddcat.entity.vo.role.RoleSaveRequest;
 import com.ddcat.mapper.SysRoleMapper;
 import com.ddcat.service.SysRoleService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +38,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdate(RoleSaveRequest r) {
         SysRole entity = new SysRole();
-        BeanUtils.copyProperties(r, entity);
+        BeanUtil.copyProperties(r, entity);
         saveOrUpdate(entity);
         long[] permissionIds = r.getPermissionIds();
         if (ArrayUtil.isNotEmpty(permissionIds)) {

@@ -2,6 +2,7 @@ package com.ddcat.service.impl;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -24,7 +25,6 @@ import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
 import io.netty.channel.Channel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public void saveOrUpdate(UserSaveRequest r) {
         SysUser entity = new SysUser();
-        BeanUtils.copyProperties(r, entity);
+        BeanUtil.copyProperties(r, entity);
         if (StrUtil.isNotBlank(entity.getPassword())) {
             //密码加密
             entity.setPassword(SecureUtil.md5(entity.getPassword()));
