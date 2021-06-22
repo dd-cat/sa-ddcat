@@ -3,7 +3,6 @@ package com.ddcat.netty;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ddcat.constant.NettyConstant;
-import com.ddcat.constant.UserConstant;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -62,9 +61,13 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端断开连接：{}", ctx.channel().id());
-        AttributeKey<String> key = AttributeKey.valueOf(UserConstant.USER_ID);
+        //防止被顶下线用户websocket 没有及时断开 对比Channel是否和当前在线的是否一致
+        AttributeKey<String> key = AttributeKey.valueOf(NettyConstant.USER_ID);
         String userId = ctx.channel().attr(key).get();
-        userChannelMap.remove(userId);
+        Channel channel = userChannelMap.get(userId);
+        if (channel != null && ctx.channel().id().asShortText().equals(channel.id().asShortText())) {
+            userChannelMap.remove(userId);
+        }
         channels.remove(ctx.channel());
         super.channelInactive(ctx);
     }

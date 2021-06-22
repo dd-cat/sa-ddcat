@@ -7,10 +7,6 @@ package com.ddcat.constant;
  */
 public interface NettyConstant {
     /**
-     * 监听地址
-     */
-    String HOST = "localhost";
-    /**
      * 监听端口
      */
     Integer PORT = 12567;
