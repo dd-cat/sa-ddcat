@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dept;
+package com.ddcat.entity.dept;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class DeptPageResponse {
+public class DeptPageVO {
 
     private long id;
     /**

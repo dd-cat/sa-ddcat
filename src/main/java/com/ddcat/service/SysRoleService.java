@@ -2,9 +2,9 @@ package com.ddcat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.SysRole;
-import com.ddcat.entity.vo.role.RolePageRequest;
-import com.ddcat.entity.vo.role.RoleSaveRequest;
+import com.ddcat.entity.role.RolePageDTO;
+import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.SysRole;
 
 import java.util.List;
 
@@ -16,17 +16,17 @@ public interface SysRoleService extends BaseService<SysRole> {
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
-    IPage<SysRole> page(RolePageRequest r);
+    IPage<SysRole> page(RolePageDTO dto);
 
     /**
      * 保存or修改
      *
-     * @param r -
+     * @param dto -
      */
-    void saveOrUpdate(RoleSaveRequest r);
+    void saveOrUpdate(RoleSaveDTO dto);
 
     /**
      * 删除

@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.SysDict;
-import com.ddcat.entity.vo.dict.DictPageRequest;
-import com.ddcat.entity.vo.dict.DictSaveRequest;
+import com.ddcat.entity.dict.DictPageDTO;
+import com.ddcat.entity.dict.DictSaveDTO;
+import com.ddcat.entity.dict.SysDict;
 import com.ddcat.service.SysDictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,26 +43,26 @@ public class SysDictController {
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
     @Log("字典分页查询")
     @PostMapping("page")
     @SaCheckLogin
-    public IPage<SysDict> page(@Valid @RequestBody DictPageRequest r) {
-        return service.page(new Page<>(r.getCurrent(), r.getSize()), Wrappers.<SysDict>lambdaQuery().like(StrUtil.isNotBlank(r.getName()), SysDict::getName, r.getName()));
+    public IPage<SysDict> page(@Valid @RequestBody DictPageDTO dto) {
+        return service.page(new Page<>(dto.getCurrent(), dto.getSize()), Wrappers.<SysDict>lambdaQuery().like(StrUtil.isNotBlank(dto.getName()), SysDict::getName, dto.getName()));
     }
 
     /**
      * 字典保存or修改
      *
-     * @param r -
+     * @param dto -
      */
     @Log("字典保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
-    public void saveOrUpdate(@Valid @RequestBody DictSaveRequest r) {
-        service.save(r);
+    public void saveOrUpdate(@Valid @RequestBody DictSaveDTO dto) {
+        service.save(dto);
     }
 
     /**
@@ -74,7 +74,7 @@ public class SysDictController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:dict:del")
     public void delete(@PathVariable long id) {
-        SysDict entity = new SysDict();
+        var entity = new SysDict();
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }

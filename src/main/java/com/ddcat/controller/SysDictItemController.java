@@ -5,9 +5,9 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.annotation.Log;
 import com.ddcat.constant.RedisKeyConstant;
-import com.ddcat.entity.SysDictItem;
-import com.ddcat.entity.vo.dict.DictItemSaveRequest;
-import com.ddcat.entity.vo.dict.DictItemUpdateRequest;
+import com.ddcat.entity.dict.DictItemSaveDTO;
+import com.ddcat.entity.dict.DictItemUpdateDTO;
+import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.service.SysDictItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -58,27 +58,27 @@ public class SysDictItemController {
     /**
      * 字典项保存or修改
      *
-     * @param r -
+     * @param dto -
      */
     @Log("字典项保存or修改")
     @PostMapping
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
-    public void saveItem(@Valid @RequestBody DictItemSaveRequest r) {
-        service.saveItem(r);
+    public void saveItem(@Valid @RequestBody DictItemSaveDTO dto) {
+        service.saveItem(dto);
     }
 
     /**
      * 批量更新字典项
      *
-     * @param r -
+     * @param dto -
      */
     @Log("批量更新字典项")
     @PostMapping("updateItems")
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission("sys:dict:edit")
-    public void updateItems(@Valid @RequestBody DictItemUpdateRequest r) {
-        service.updateBatchById(r.getDictItemList());
+    public void updateItems(@Valid @RequestBody DictItemUpdateDTO dto) {
+        service.updateBatchById(dto.getDictItemList());
     }
 
     /**
@@ -91,7 +91,7 @@ public class SysDictItemController {
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission("sys:dict:del")
     public void deleteItem(@PathVariable long id) {
-        SysDictItem entity = new SysDictItem();
+        var entity = new SysDictItem();
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }

@@ -1,8 +1,8 @@
 package com.ddcat.service;
 
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.SysDict;
-import com.ddcat.entity.vo.dict.DictSaveRequest;
+import com.ddcat.entity.dict.DictSaveDTO;
+import com.ddcat.entity.dict.SysDict;
 
 /**
  * @author dd-cat
@@ -12,9 +12,9 @@ public interface SysDictService extends BaseService<SysDict> {
     /**
      * 保存
      *
-     * @param r -
+     * @param dto -
      */
-    void save(DictSaveRequest r);
+    void save(DictSaveDTO dto);
 
     /**
      * 删除字典and字典项

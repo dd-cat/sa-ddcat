@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dept;
+package com.ddcat.entity.dept;
 
 import com.ddcat.entity.common.Search;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class DeptPageRequest extends Search {
+public class DeptPageDTO extends Search {
 
     /**
      * 父节点ID

@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class UserImportRequest {
+public class UserImportVO {
     /**
      * 账户
      */

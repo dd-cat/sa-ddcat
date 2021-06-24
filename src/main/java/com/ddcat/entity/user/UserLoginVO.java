@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
 import com.ddcat.entity.SysUser;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class UserLoginResponse {
+public class UserLoginVO {
     /**
      * 用户信息
      */

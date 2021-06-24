@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dict;
+package com.ddcat.entity.dict;
 
 import com.ddcat.entity.common.Search;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class DictPageRequest extends Search {
+public class DictPageDTO extends Search {
 
     /**
      * 名称

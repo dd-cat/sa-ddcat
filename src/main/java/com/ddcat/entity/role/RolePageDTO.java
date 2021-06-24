@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.role;
+package com.ddcat.entity.role;
 
 import com.ddcat.entity.common.Search;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class RolePageRequest extends Search {
+public class RolePageDTO extends Search {
     /**
      * 名称
      */

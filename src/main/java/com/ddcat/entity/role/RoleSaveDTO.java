@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.role;
+package com.ddcat.entity.role;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @author dd-cat
  */
 @Data
-public class RoleSaveRequest {
+public class RoleSaveDTO {
 
     private Long id;
     /**

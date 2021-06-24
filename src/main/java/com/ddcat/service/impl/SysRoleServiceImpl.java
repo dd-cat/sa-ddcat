@@ -2,15 +2,13 @@ package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.entity.SysRole;
-import com.ddcat.entity.vo.role.RolePageRequest;
-import com.ddcat.entity.vo.role.RoleSaveRequest;
+import com.ddcat.entity.role.RolePageDTO;
+import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.SysRole;
 import com.ddcat.mapper.SysRoleMapper;
 import com.ddcat.service.SysRoleService;
 import org.springframework.stereotype.Service;
@@ -24,23 +22,23 @@ import java.util.List;
 @Service
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Override
-    public IPage<SysRole> page(RolePageRequest r) {
-        Page<SysRole> page = new Page<>(r.getCurrent(), r.getSize());
+    public IPage<SysRole> page(RolePageDTO dto) {
+        var page = new Page<SysRole>(dto.getCurrent(), dto.getSize());
         // 构建查询条件
-        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.<SysRole>lambdaQuery()
-                .like(StrUtil.isNotBlank(r.getName()), SysRole::getName, r.getName())
-                .like(StrUtil.isNotBlank(r.getCode()), SysRole::getCode, r.getCode())
-                .like(StrUtil.isNotBlank(r.getRemark()), SysRole::getRemark, r.getRemark());
+        var queryWrapper = Wrappers.<SysRole>lambdaQuery()
+                .like(!dto.getName().isBlank(), SysRole::getName, dto.getName())
+                .like(!dto.getCode().isBlank(), SysRole::getCode, dto.getCode())
+                .like(!dto.getRemark().isBlank(), SysRole::getRemark, dto.getRemark());
         return this.page(page, queryWrapper);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(RoleSaveRequest r) {
-        SysRole entity = new SysRole();
+    public void saveOrUpdate(RoleSaveDTO r) {
+        var entity = new SysRole();
         BeanUtil.copyProperties(r, entity);
         saveOrUpdate(entity);
-        long[] permissionIds = r.getPermissionIds();
+        var permissionIds = r.getPermissionIds();
         if (ArrayUtil.isNotEmpty(permissionIds)) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuById(entity.getId());
@@ -51,8 +49,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public void removeById(long id) {
-        boolean removeFlag = super.removeById(id);
-        if (removeFlag) {
+        var count = baseMapper.deleteById(id);
+        if (count > 0) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuById(id);
         }

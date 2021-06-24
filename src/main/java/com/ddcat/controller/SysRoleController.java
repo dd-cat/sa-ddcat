@@ -4,9 +4,9 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.SysRole;
-import com.ddcat.entity.vo.role.RolePageRequest;
-import com.ddcat.entity.vo.role.RoleSaveRequest;
+import com.ddcat.entity.role.RolePageDTO;
+import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.SysRole;
 import com.ddcat.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,25 +40,25 @@ public class SysRoleController {
     /**
      * 保存or修改
      *
-     * @param r -
+     * @param dto -
      */
     @Log("角色保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:role:add", "sys:role:edit"})
-    public void saveOrUpdate(@Valid @RequestBody RoleSaveRequest r) {
-        service.saveOrUpdate(r);
+    public void saveOrUpdate(@Valid @RequestBody RoleSaveDTO dto) {
+        service.saveOrUpdate(dto);
     }
 
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      */
     @Log("角色分页查询")
     @PostMapping("page")
     @SaCheckLogin
-    public IPage<SysRole> page(@Valid @RequestBody RolePageRequest r) {
-        return service.page(r);
+    public IPage<SysRole> page(@Valid @RequestBody RolePageDTO dto) {
+        return service.page(dto);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SysRoleController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:role:del")
     public void delete(@PathVariable long id) {
-        SysRole entity = new SysRole();
+        var entity = new SysRole();
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }

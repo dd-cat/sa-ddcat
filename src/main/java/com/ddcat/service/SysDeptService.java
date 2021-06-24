@@ -3,9 +3,9 @@ package com.ddcat.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.SysDept;
-import com.ddcat.entity.vo.dept.DeptPageRequest;
-import com.ddcat.entity.vo.dept.DeptSaveRequest;
+import com.ddcat.entity.dept.DeptPageDTO;
+import com.ddcat.entity.dept.DeptSaveDTO;
+import com.ddcat.entity.dept.SysDept;
 
 import java.util.List;
 import java.util.Set;
@@ -24,16 +24,16 @@ public interface SysDeptService extends BaseService<SysDept> {
     /**
      * 保存
      *
-     * @param r -
+     * @param dto -
      */
-    void save(DeptSaveRequest r);
+    void save(DeptSaveDTO dto);
 
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
-    IPage<SysDept> page(DeptPageRequest r);
+    IPage<SysDept> page(DeptPageDTO dto);
 
 }

@@ -1,16 +1,13 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
+import com.ddcat.entity.common.Search;
 import lombok.Data;
 
 /**
  * @author dd-cat
  */
 @Data
-public class UserPageResponse {
-    /**
-     * 序号
-     */
-    private Long id;
+public class UserPageDTO extends Search {
     /**
      * 账户
      */
@@ -20,11 +17,11 @@ public class UserPageResponse {
      */
     private String name;
     /**
-     * 角色
+     * 手机号
      */
-    private String roleName;
+    private String mobile;
     /**
      * 所属机构
      */
-    private String deptName;
+    private Long deptId;
 }

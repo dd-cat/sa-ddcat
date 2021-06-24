@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dict;
+package com.ddcat.entity.dict;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @author dd-cat
  */
 @Data
-public class DictSaveRequest {
+public class DictItemSaveDTO {
 
     private Long id;
     /**
@@ -24,4 +24,10 @@ public class DictSaveRequest {
     @Length(max = 20, message = "名称长度为[1-20]")
     @NotBlank(message = "名称必填")
     private String name;
+    /**
+     * 值
+     */
+    @Length(max = 10, message = "值长度为[1-10]")
+    @NotBlank(message = "值必填")
+    private String value;
 }

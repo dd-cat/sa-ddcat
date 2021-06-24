@@ -3,6 +3,7 @@ package com.ddcat.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -11,10 +12,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.entity.SysMenu;
-import com.ddcat.entity.SysRole;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.vo.user.*;
+import com.ddcat.entity.menu.SysMenu;
+import com.ddcat.entity.role.SysRole;
+import com.ddcat.entity.user.*;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.mapper.SysUserMapper;
@@ -23,12 +24,14 @@ import com.ddcat.netty.NettyHandler;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
-import io.netty.channel.Channel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -46,46 +49,59 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private final SysMenuService menuService;
 
     @Override
-    public void saveOrUpdate(UserSaveRequest r) {
-        SysUser entity = new SysUser();
-        BeanUtil.copyProperties(r, entity);
-        if (StrUtil.isNotBlank(entity.getPassword())) {
-            //密码加密
-            entity.setPassword(SecureUtil.md5(entity.getPassword()));
+    public void saveOrUpdate(UserSaveDTO dto) {
+        // 验证账号是否已经存在
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
+                .eq(SysUser::getAccount, dto.getAccount());
+        if (dto.getId() != null) {
+            queryWrapper.ne(SysUser::getId, dto.getId());
         }
+        var count = baseMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ResultEnum.B000003);
+        }
+        // 验证身份证信息
+        if (!dto.getIdCard().isBlank()) {
+            boolean validCard = IdcardUtil.isValidCard(dto.getIdCard());
+            if (!validCard) {
+                throw new BusinessException(ResultEnum.B000004);
+            }
+        }
+        var entity = new SysUser();
+        BeanUtil.copyProperties(dto, entity);
         if (entity.getId() == null) {
-            //初始密码
+            // 初始化密码
             entity.setPassword(password);
         }
         this.saveOrUpdate(entity);
     }
 
     @Override
-    public IPage<UserPageResponse> page(UserPageRequest r) {
+    public IPage<UserPageVO> page(UserPageDTO dto) {
         List<Long> ids = new ArrayList<>();
-        Long deptId = r.getDeptId();
+        var deptId = dto.getDeptId();
         if (deptId != null) {
             deptMapper.selectTreeId(deptId);
         }
-        return baseMapper.page(new Page<>(r.getCurrent(), r.getSize()), r, ids);
+        return baseMapper.page(new Page<>(dto.getCurrent(), dto.getSize()), dto, ids);
     }
 
     @Override
-    public SaTokenInfo login(UserLoginRequest r) {
+    public SaTokenInfo login(UserLoginDTO dto) {
         LambdaQueryWrapper<SysUser> query;
-        boolean number = NumberUtil.isNumber(r.getKey());
+        boolean number = NumberUtil.isNumber(dto.getKey());
         if (number) {
-            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getKey()), SysUser::getMobile, r.getKey());
+            query = Wrappers.<SysUser>lambdaQuery().eq(!dto.getKey().isBlank(), SysUser::getMobile, dto.getKey());
         } else {
-            query = Wrappers.<SysUser>lambdaQuery().eq(StrUtil.isNotBlank(r.getKey()), SysUser::getAccount, r.getKey());
+            query = Wrappers.<SysUser>lambdaQuery().eq(!dto.getKey().isBlank(), SysUser::getAccount, dto.getKey());
         }
-        SysUser entity = baseMapper.selectOne(query);
+        var entity = baseMapper.selectOne(query);
         // 用户不存在
         if (entity == null) {
             throw new BusinessException(ResultEnum.S000001);
         }
         if (!number) {
-            String md5Str = SecureUtil.md5(r.getPassword());
+            var md5Str = SecureUtil.md5(dto.getPassword());
             if (!entity.getPassword().equals(md5Str)) {
                 throw new BusinessException(ResultEnum.S000002);
             }
@@ -96,31 +112,45 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public IPage<UserOnlineListResponse> online(UserOnlineListRequest r) {
-        Map<String, Channel> dataMap = NettyHandler.userChannelMap;
-        Set<String> ids = dataMap.keySet();
-        if (ids.size() <= 0) {
+    public IPage<UserOnlineListVO> online(UserOnlineListDTO dto) {
+        var dataMap = NettyHandler.userChannelMap;
+        var ids = dataMap.keySet();
+        if (ids.isEmpty()) {
+            ids = new HashSet<>();
             ids.add("0");
         }
-        return baseMapper.onlinePage(new Page<>(r.getCurrent(), r.getSize()), r, ids);
+        return baseMapper.onlinePage(new Page<>(dto.getCurrent(), dto.getSize()), dto, ids);
     }
 
     @Override
-    public UserLoginResponse info() {
-        SysUser entity = this.getById(StpUtil.getLoginIdAsLong());
+    public UserLoginVO info() {
+        var entity = this.getById(StpUtil.getLoginIdAsLong());
         Set<String> permissions = new HashSet<>();
         //通过用户角色ID 获取用户权限列表
-        List<SysRole> roles = roleService.findRolesByUserId(entity.getId());
+        var roles = roleService.findRolesByUserId(entity.getId());
 
-        List<String> roleCodes = roles.stream().map(SysRole::getCode).collect(Collectors.toList());
+        var roleCodes = roles.stream().map(SysRole::getCode).collect(Collectors.toList());
 
-        List<Long> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+        var roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
         roleIds.forEach(roleId -> {
-            List<String> permissionList = menuService.findPermissionByRoleId(roleId).stream()
+            var permissionList = menuService.findMenuByRoleId(roleId).stream()
                     .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
                     .collect(Collectors.toList());
             permissions.addAll(permissionList);
         });
-        return new UserLoginResponse(entity, new ArrayList<>(permissions), roleCodes);
+        return new UserLoginVO(entity, new ArrayList<>(permissions), roleCodes);
+    }
+
+    @Override
+    public void updatePassword(UserPasswordDTO dto) {
+        var user = baseMapper.selectById(StpUtil.getLoginIdAsLong());
+        // 判断旧密码 和 原密码是否一致
+        if (!user.getPassword().equals(SecureUtil.md5(dto.getOldPassword()))) {
+            throw new BusinessException(ResultEnum.B000005);
+        }
+        user.setPassword(SecureUtil.md5(dto.getNewPassword()));
+        baseMapper.updateById(user);
+        // 修改完密码后注销
+        StpUtil.logout();
     }
 }

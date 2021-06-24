@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.vo.user.*;
+import com.ddcat.entity.user.*;
 
 /**
  * @author dd-cat
@@ -14,38 +14,45 @@ public interface SysUserService extends BaseService<SysUser> {
     /**
      * 保存or修改
      *
-     * @param r -
+     * @param dto -
      */
-    void saveOrUpdate(UserSaveRequest r);
+    void saveOrUpdate(UserSaveDTO dto);
 
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
-    IPage<UserPageResponse> page(UserPageRequest r);
+    IPage<UserPageVO> page(UserPageDTO dto);
 
     /**
      * 用户登录
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
-    SaTokenInfo login(UserLoginRequest r);
+    SaTokenInfo login(UserLoginDTO dto);
 
     /**
      * 在线用户列表
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
-    IPage<UserOnlineListResponse> online(UserOnlineListRequest r);
+    IPage<UserOnlineListVO> online(UserOnlineListDTO dto);
 
     /**
      * 当前登录用户信息
      *
      * @return -
      */
-    UserLoginResponse info();
+    UserLoginVO info();
+
+    /**
+     * 修改当前登陆人密码
+     *
+     * @param dto -
+     */
+    void updatePassword(UserPasswordDTO dto);
 }

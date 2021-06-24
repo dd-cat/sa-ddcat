@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dept;
+package com.ddcat.entity.dept;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class DeptSaveRequest {
+public class DeptSaveDTO {
 
     private Long id;
     /**

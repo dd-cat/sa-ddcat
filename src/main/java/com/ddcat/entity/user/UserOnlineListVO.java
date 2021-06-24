@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * @author dd-cat
  */
 @Data
-public class UserOnlineListResponse {
+public class UserOnlineListVO {
     private Long id;
     /**
      * 姓名

@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.dict;
+package com.ddcat.entity.dict;
 
 import com.ddcat.entity.SysDictItem;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author dd-cat
  */
 @Data
-public class DictItemUpdateRequest {
+public class DictItemUpdateDTO {
 
     List<SysDictItem> dictItemList;
 }

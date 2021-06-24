@@ -4,11 +4,12 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.vo.user.*;
+import com.ddcat.entity.user.*;
+import com.ddcat.exception.BusinessException;
+import com.ddcat.menu.ResultEnum;
 import com.ddcat.service.SysUserService;
 import com.ddcat.util.ExcelUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * 用户
@@ -38,20 +38,20 @@ public class SysUserController {
     @Log("当前登录用户信息")
     @GetMapping("info")
     @SaCheckLogin
-    public UserLoginResponse info() {
+    public UserLoginVO info() {
         return service.info();
     }
 
     /**
      * 分页查询
      *
-     * @param r -
+     * @param dto -
      */
     @Log("用户分页查询")
     @PostMapping("page")
     @SaCheckLogin
-    public IPage<UserPageResponse> page(@RequestBody UserPageRequest r) {
-        return service.page(r);
+    public IPage<UserPageVO> page(@RequestBody UserPageDTO dto) {
+        return service.page(dto);
     }
 
     /**
@@ -69,17 +69,13 @@ public class SysUserController {
     /**
      * 保存or修改
      *
-     * @param r -
+     * @param dto -
      */
     @Log("用户保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:user:add", "sys:user:edit"})
-    public void saveOrUpdate(@Valid @RequestBody UserSaveRequest r) {
-        service.saveOrUpdate(r);
-        if (r.getId() != null && StrUtil.isNotBlank(r.getPassword())) {
-            //修改了密码 注销登录
-            StpUtil.logoutByLoginId(r.getId());
-        }
+    public void saveOrUpdate(@Valid @RequestBody UserSaveDTO dto) {
+        service.saveOrUpdate(dto);
     }
 
     /**
@@ -89,7 +85,11 @@ public class SysUserController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:user:del")
     public void delete(@PathVariable long id) {
-        SysUser entity = new SysUser();
+        var loginId = StpUtil.getLoginIdAsLong();
+        if (id == loginId) {
+            throw new BusinessException(ResultEnum.B000002);
+        }
+        var entity = new SysUser();
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }
@@ -97,13 +97,13 @@ public class SysUserController {
     /**
      * 在线离线用户列表
      *
-     * @param r -
+     * @param dto -
      * @return -
      */
     @PostMapping("online")
     @SaCheckLogin
-    public IPage<UserOnlineListResponse> online(@RequestBody UserOnlineListRequest r) {
-        return service.online(r);
+    public IPage<UserOnlineListVO> online(@RequestBody UserOnlineListDTO dto) {
+        return service.online(dto);
     }
 
     /**
@@ -113,13 +113,23 @@ public class SysUserController {
      */
     @PostMapping("import")
     public void importData(MultipartFile file) throws IOException {
-        List<UserImportRequest> list = ExcelUtils.importExcel(file, 0, 1, UserImportRequest.class);
-        for (UserImportRequest r : list) {
-            SysUser entity = new SysUser();
-            BeanUtil.copyProperties(r, entity);
-            entity.setSex(Byte.valueOf(r.getSex()));
+        var list = ExcelUtils.importExcel(file, 0, 1, UserImportVO.class);
+        for (var vo : list) {
+            var entity = new SysUser();
+            BeanUtil.copyProperties(vo, entity);
+            entity.setSex(Byte.valueOf(vo.getSex()));
             service.save(entity);
         }
+    }
+
+    /**
+     * 修改当前登陆人密码
+     *
+     * @param dto -
+     */
+    @PutMapping("/updatePassword")
+    public void updatePassword(@RequestBody UserPasswordDTO dto) {
+        service.updatePassword(dto);
     }
 
 }

@@ -5,9 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
-import com.ddcat.entity.SysDict;
-import com.ddcat.entity.SysDictItem;
-import com.ddcat.entity.vo.dict.DictSaveRequest;
+import com.ddcat.entity.dict.DictSaveDTO;
+import com.ddcat.entity.dict.SysDict;
+import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.mapper.SysDictItemMapper;
 import com.ddcat.mapper.SysDictMapper;
 import com.ddcat.service.SysDictService;
@@ -25,13 +25,13 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
     private final SysDictItemMapper dictItemMapper;
 
     @Override
-    public void save(DictSaveRequest r) {
-        SysDict entity = new SysDict();
-        BeanUtil.copyProperties(r, entity);
+    public void save(DictSaveDTO dto) {
+        var entity = new SysDict();
+        BeanUtil.copyProperties(dto, entity);
         saveOrUpdate(entity);
-        if (r.getId() != null && StrUtil.isNotBlank(r.getType())) {
+        if (dto.getId() != null && StrUtil.isNotBlank(dto.getType())) {
             //修改子集type名称
-            dictItemMapper.updateBatchById(r.getId(), r.getType());
+            dictItemMapper.updateBatchById(dto.getId(), dto.getType());
         }
     }
 

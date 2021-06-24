@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
  * @author dd-cat
  */
 @Data
-public class UserLoginRequest {
+public class UserLoginDTO {
     /**
      * 账号 可以是手机号、账号等
      */

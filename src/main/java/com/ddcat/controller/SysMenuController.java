@@ -4,8 +4,8 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.SysMenu;
-import com.ddcat.entity.vo.menu.MenuSaveRequest;
+import com.ddcat.entity.menu.MenuSaveDTO;
+import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单
@@ -49,7 +48,7 @@ public class SysMenuController {
     @GetMapping("tree")
     @SaCheckLogin
     public List<Tree<Long>> tree() {
-        Set<SysMenu> all = new HashSet<>(service.list());
+        var all = new HashSet<SysMenu>(service.list());
         return service.tree(all);
     }
 
@@ -61,9 +60,9 @@ public class SysMenuController {
     @Log("菜单保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:menu:add", "sys:menu:edit"})
-    public void saveOrUpdate(@Valid @RequestBody MenuSaveRequest r) {
-        SysMenu entity = new SysMenu();
-        BeanUtils.copyProperties(r, entity);
+    public void saveOrUpdate(@Valid @RequestBody MenuSaveDTO dto) {
+        var entity = new SysMenu();
+        BeanUtils.copyProperties(dto, entity);
         service.saveOrUpdate(entity);
     }
 
@@ -76,7 +75,7 @@ public class SysMenuController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:menu:del")
     public void delete(@PathVariable long id) {
-        SysMenu entity = new SysMenu();
+        var entity = new SysMenu();
         entity.setId(id);
         service.deleteByIdWithFill(entity);
     }

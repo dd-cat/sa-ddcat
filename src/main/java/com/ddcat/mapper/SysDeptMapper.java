@@ -1,7 +1,7 @@
 package com.ddcat.mapper;
 
 import com.ddcat.base.SuperMapper;
-import com.ddcat.entity.SysDept;
+import com.ddcat.entity.dept.SysDept;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -31,6 +31,7 @@ public interface SysDeptMapper extends SuperMapper<SysDept> {
     /**
      * 获取当前节点下所有节点ID
      *
+     * @param deptId 部门ID
      * @return -
      */
     List<Long> selectTreeId(Long deptId);

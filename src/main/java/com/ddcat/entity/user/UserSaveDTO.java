@@ -1,4 +1,4 @@
-package com.ddcat.entity.vo.user;
+package com.ddcat.entity.user;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class UserSaveRequest {
+public class UserSaveDTO {
     private Long id;
     /**
      * 账户
@@ -40,14 +40,6 @@ public class UserSaveRequest {
      */
     @NotNull(message = "所属机构必填")
     private Long deptId;
-    /**
-     * 头像
-     */
-    private String avatar;
-    /**
-     * 密码
-     */
-    private String password;
     /**
      * 个人简介
      */

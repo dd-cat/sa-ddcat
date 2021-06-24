@@ -5,11 +5,10 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
-import cn.hutool.core.util.StrUtil;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.entity.SysMenu;
-import com.ddcat.entity.SysRole;
 import com.ddcat.entity.common.BaseEntity;
+import com.ddcat.entity.menu.SysMenu;
+import com.ddcat.entity.role.SysRole;
 import com.ddcat.mapper.SysMenuMapper;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
@@ -30,12 +29,12 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenu> 
     @Override
     public List<Tree<Long>> tree(Set<SysMenu> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
-        for (SysMenu menu : all) {
-            TreeNode<Long> treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
-            Map<String, Object> extra = new HashMap<>();
+        for (var menu : all) {
+            var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
+            var extra = new HashMap<String, Object>(4);
             extra.put("path", menu.getPath());
             extra.put("icon", menu.getIcon());
-            if (StrUtil.isNotBlank(menu.getComponent())) {
+            if (!menu.getComponent().isBlank()) {
                 extra.put("component", menu.getComponent());
             } else {
                 extra.put("component", "Layout");
@@ -53,23 +52,23 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenu> 
     }
 
     @Override
-    public List<SysMenu> findPermissionByRoleId(Long roleId) {
-        return baseMapper.listPermissionByRoleId(roleId);
+    public List<SysMenu> findMenuByRoleId(Long roleId) {
+        return baseMapper.findMenuByRoleId(roleId);
     }
 
     @Override
     public List<Tree<Long>> getUserMenus() {
-        List<SysMenu> all = new ArrayList<>();
-        List<Long> roleIds = roleService.findRolesByUserId(StpUtil.getLoginIdAsLong()).stream().map(SysRole::getId)
+        var all = new ArrayList<SysMenu>();
+        var roleIds = roleService.findRolesByUserId(StpUtil.getLoginIdAsLong()).stream().map(SysRole::getId)
                 .collect(Collectors.toList());
         roleIds.forEach(roleId -> {
-            List<SysMenu> collect = baseMapper.listPermissionByRoleId(roleId).stream()
+            var collect = baseMapper.findMenuByRoleId(roleId).stream()
                     .filter(permission -> 2 != permission.getType())
                     .collect(Collectors.toList());
             all.addAll(collect);
 
         });
-        Set<SysMenu> personSet = new TreeSet<>(Comparator.comparing(BaseEntity::getId));
+        var personSet = new TreeSet<SysMenu>(Comparator.comparing(BaseEntity::getId));
         personSet.addAll(all);
         return tree(personSet);
     }

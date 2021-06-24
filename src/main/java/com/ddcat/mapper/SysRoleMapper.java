@@ -1,7 +1,7 @@
 package com.ddcat.mapper;
 
 import com.ddcat.base.SuperMapper;
-import com.ddcat.entity.SysRole;
+import com.ddcat.entity.role.SysRole;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;

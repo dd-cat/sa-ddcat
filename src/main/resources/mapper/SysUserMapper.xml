@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ddcat.mapper.SysUserMapper">
-    <select id="page" resultType="UserPageResponse">
+    <select id="page" resultType="UserPageVO">
         SELECT
         a.id,
         a.account,
@@ -12,14 +12,14 @@
         FROM sys_user a
         LEFT JOIN sys_dept b ON a.dept_id = b.id
         WHERE a.flag = 0
-        <if test="r.account != null and r.account != ''">
-            AND a.account LIKE "%"#{r.account}"%"
+        <if test="dto.account != null and dto.account != ''">
+            AND a.account LIKE "%"#{dto.account}"%"
         </if>
-        <if test="r.name != null and r.name != ''">
-            AND a.name LIKE "%"#{r.name}"%"
+        <if test="dto.name != null and dto.name != ''">
+            AND a.name LIKE "%"#{dto.name}"%"
         </if>
-        <if test="r.mobile != null and r.mobile != ''">
-            AND a.mobile LIKE "%"#{r.mobile}"%"
+        <if test="dto.mobile != null and dto.mobile != ''">
+            AND a.mobile LIKE "%"#{dto.mobile}"%"
         </if>
         <if test="!ids.isEmpty()">
             AND a.dept_id IN (
@@ -30,21 +30,21 @@
         </if>
     </select>
 
-    <select id="onlinePage" resultType="UserOnlineListResponse">
+    <select id="onlinePage" resultType="UserOnlineListVO">
         SELECT id,username,'在线' status FROM sys_user
         where flag = 0
         AND id IN (
         <foreach collection="ids" item="id" separator=",">
             ${id}
         </foreach>
-        <if test="r.ids !=null and r.ids.length > 0">
+        <if test="dto.ids !=null and dto.ids.length > 0">
             AND id IN (
-            <foreach collection="r.ids" item="id" separator=",">
+            <foreach collection="dto.ids" item="id" separator=",">
                 ${id}
             </foreach>
         </if>
         )
-        <if test="r.flag != 1">
+        <if test="dto.flag != 1">
             UNION
             SELECT id,username,'离线' status FROM sys_user
             WHERE flag = 0
@@ -52,9 +52,9 @@
             <foreach collection="ids" item="id" separator=",">
                 ${id}
             </foreach>
-            <if test="r.ids !=null and r.ids.length > 0">
+            <if test="dto.ids !=null and dto.ids.length > 0">
                 AND id IN (
-                <foreach collection="r.ids" item="id" separator=",">
+                <foreach collection="dto.ids" item="id" separator=",">
                     ${id}
                 </foreach>
             </if>

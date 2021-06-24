@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.SuperMapper;
 import com.ddcat.entity.SysUser;
-import com.ddcat.entity.vo.user.UserOnlineListRequest;
-import com.ddcat.entity.vo.user.UserOnlineListResponse;
-import com.ddcat.entity.vo.user.UserPageRequest;
-import com.ddcat.entity.vo.user.UserPageResponse;
+import com.ddcat.entity.user.UserOnlineListDTO;
+import com.ddcat.entity.user.UserOnlineListVO;
+import com.ddcat.entity.user.UserPageDTO;
+import com.ddcat.entity.user.UserPageVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,16 +21,20 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
     /**
      * 查询数据
      *
-     * @param r -
+     * @param page -
+     * @param dto  -
+     * @param ids  -
      * @return -
      */
-    IPage<UserPageResponse> page(Page<?> page, @Param("r") UserPageRequest r, @Param("ids") List<Long> ids);
+    IPage<UserPageVO> page(Page<?> page, @Param("dto") UserPageDTO dto, @Param("ids") List<Long> ids);
 
     /**
      * 在线用户列表
      *
-     * @param r -
+     * @param page -
+     * @param dto  -
+     * @param ids  -
      * @return -
      */
-    IPage<UserOnlineListResponse> onlinePage(Page<?> page, @Param("r") UserOnlineListRequest r, @Param("ids") Set<String> ids);
+    IPage<UserOnlineListVO> onlinePage(Page<?> page, @Param("dto") UserOnlineListDTO dto, @Param("ids") Set<String> ids);
 }

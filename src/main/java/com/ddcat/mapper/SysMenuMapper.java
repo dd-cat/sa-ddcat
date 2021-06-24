@@ -1,7 +1,7 @@
 package com.ddcat.mapper;
 
 import com.ddcat.base.SuperMapper;
-import com.ddcat.entity.SysMenu;
+import com.ddcat.entity.menu.SysMenu;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -26,5 +26,5 @@ public interface SysMenuMapper extends SuperMapper<SysMenu> {
      * @param roleId 角色ID
      * @return List<SysMenu>
      */
-    List<SysMenu> listPermissionByRoleId(Long roleId);
+    List<SysMenu> findMenuByRoleId(Long roleId);
 }

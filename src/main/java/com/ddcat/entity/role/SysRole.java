@@ -1,4 +1,4 @@
-package com.ddcat.entity;
+package com.ddcat.entity.role;
 
 import com.ddcat.entity.common.BaseEntity;
 import lombok.Data;

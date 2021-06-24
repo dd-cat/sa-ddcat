@@ -1,7 +1,7 @@
 package com.ddcat.mapper;
 
 import com.ddcat.base.SuperMapper;
-import com.ddcat.entity.SysDictItem;
+import com.ddcat.entity.dict.SysDictItem;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 

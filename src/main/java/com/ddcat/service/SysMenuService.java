@@ -2,7 +2,7 @@ package com.ddcat.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.SysMenu;
+import com.ddcat.entity.menu.SysMenu;
 
 import java.util.List;
 import java.util.Set;
@@ -32,7 +32,7 @@ public interface SysMenuService extends BaseService<SysMenu> {
      * @param roleId 角色ID
      * @return -
      */
-    List<SysMenu> findPermissionByRoleId(Long roleId);
+    List<SysMenu> findMenuByRoleId(Long roleId);
 
     /**
      * 当前登录人菜单信息
