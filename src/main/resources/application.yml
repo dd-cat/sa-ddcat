@@ -29,17 +29,10 @@ mybatis-plus:
     db-config:
       #主键类型 默认使用雪花ID
       id-type: AUTO
-      insert-strategy: not_null
-      update-strategy: not_null
-      select-strategy: not_empty
+      where-strategy: not_empty
       # 逻辑删除实体字段名 或在实体属性添加@TableLogic
       logic-delete-field: flag
-      # 逻辑删除全局值（1表示已删除，这也是Mybatis Plus的默认配置）
-      logic-delete-value: 1
-      # 逻辑未删除全局值（0表示未删除，这也是Mybatis Plus的默认配置）
-      logic-not-delete-value: 0
   configuration:
     # 开启自动驼峰命名规则映射 表字段名`a_b`映射为Java属性`aB`
     map-underscore-to-camel-case: true
-  mapper-locations: classpath*:mapper/**/*Mapper.xml
   type-aliases-package: com.ddcat.entity.**

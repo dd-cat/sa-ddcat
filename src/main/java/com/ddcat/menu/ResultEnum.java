@@ -1,6 +1,5 @@
 package com.ddcat.menu;
 
-import com.ddcat.constant.Constants;
 import lombok.Getter;
 
 /**
@@ -8,8 +7,9 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultEnum {
-    SUCCESS(Constants.SUCCESS, Constants.DEFAULT_SUCCESS_MESSAGE),
-    FAIL(Constants.FAIL, Constants.DEFAULT_FAIL_MESSAGE),
+    SUCCESS(0, "成功!"),
+    FAIL(1, "失败!"),
+    PARAMETER_ERROR(2, "参数错误"),
 
     //系统模块
     S000001(100_100_100, "用户不存在！"),
@@ -21,6 +21,7 @@ public enum ResultEnum {
     B000003(100_200_102, "账号已存在！"),
     B000004(100_200_103, "身份信息不合法！"),
     B000005(100_200_104, "旧密码输入不正确！"),
+    B000006(100_200_105, "角色已存在！"),
     ;
 
     private final long code;

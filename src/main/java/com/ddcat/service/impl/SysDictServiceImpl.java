@@ -1,7 +1,6 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
@@ -28,11 +27,17 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
     public void save(DictSaveDTO dto) {
         var entity = new SysDict();
         BeanUtil.copyProperties(dto, entity);
-        saveOrUpdate(entity);
-        if (dto.getId() != null && StrUtil.isNotBlank(dto.getType())) {
-            //修改子集type名称
-            dictItemMapper.updateBatchById(dto.getId(), dto.getType());
+        //先修改子集
+        if (dto.getId() != null && !dto.getType().isBlank()) {
+            var dict = baseMapper.selectById(dto.getId());
+            if (!dict.getType().equals(dto.getType())) {
+                var updateWrapper = Wrappers.<SysDictItem>lambdaUpdate()
+                        .set(SysDictItem::getType, dto.getType())
+                        .eq(SysDictItem::getType, dict.getType());
+                dictItemMapper.update(null, updateWrapper);
+            }
         }
+        saveOrUpdate(entity);
     }
 
     @Override

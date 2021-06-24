@@ -41,7 +41,7 @@ public class StpInterfaceImpl implements StpInterface {
             });
             return new ArrayList<>(permissions);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -49,6 +49,6 @@ public class StpInterfaceImpl implements StpInterface {
         if (StpUtil.getLoginType().equals(loginType)) {
             return roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getCode).collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 }

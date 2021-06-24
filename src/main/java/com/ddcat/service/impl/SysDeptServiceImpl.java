@@ -24,7 +24,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
     @Override
     public List<Tree<Long>> tree(Set<SysDept> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
-        for (SysDept dept : all) {
+        for (var dept : all) {
             var treeNode = new TreeNode<>(dept.getId(), dept.getParentId(), dept.getName(), dept.getSort());
             nodeList.add(treeNode);
         }
@@ -32,8 +32,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
     }
 
     @Override
-    public IPage<SysDept> page(DeptPageDTO r) {
-        return this.page(new Page<>(r.getCurrent(), r.getSize()));
+    public IPage<SysDept> page(DeptPageDTO dto) {
+        return this.page(new Page<>(dto.getCurrent(), dto.getSize()));
     }
 
 }
