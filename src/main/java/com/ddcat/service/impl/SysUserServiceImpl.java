@@ -89,7 +89,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public SaTokenInfo login(UserLoginDTO dto) {
         LambdaQueryWrapper<SysUser> query;
-        boolean number = NumberUtil.isNumber(dto.getKey());
+        var number = NumberUtil.isNumber(dto.getKey());
         if (number) {
             query = Wrappers.<SysUser>lambdaQuery().eq(!dto.getKey().isBlank(), SysUser::getMobile, dto.getKey());
         } else {

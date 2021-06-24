@@ -33,7 +33,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     /**
      * 存放用户ID与Chanel的对应信息
      */
-    protected static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
+    public static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -78,7 +78,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         } else if (frame instanceof TextWebSocketFrame) {
             textWebSocketFrameHandler(ctx, (TextWebSocketFrame) frame);
         } else if (frame instanceof CloseWebSocketFrame) {
-            closeWebSocketFrameHandler(ctx, (CloseWebSocketFrame) frame);
+            closeWebSocketFrameHandler(ctx);
         }
     }
 

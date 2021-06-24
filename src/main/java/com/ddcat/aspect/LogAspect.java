@@ -1,7 +1,6 @@
 package com.ddcat.aspect;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.json.JSONUtil;
 import com.ddcat.constant.Constants;
 import com.ddcat.entity.SysLog;
 import com.ddcat.service.SysLogService;
@@ -13,6 +12,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * @author dd-cat
@@ -38,7 +38,7 @@ public class LogAspect {
         Object obj;
         SysLog l = new SysLog();
         l.setMethod(className + "." + methodName + "()");
-        l.setParams(JSONUtil.toJsonStr(point.getArgs()));
+        l.setParams(Arrays.toString(point.getArgs()));
         l.setTitle(sysLog.value());
         try {
             obj = point.proceed();

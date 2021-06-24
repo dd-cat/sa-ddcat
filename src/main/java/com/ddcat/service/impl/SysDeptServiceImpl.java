@@ -1,6 +1,5 @@
 package com.ddcat.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
@@ -9,7 +8,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.dept.DeptPageDTO;
-import com.ddcat.entity.dept.DeptSaveDTO;
 import com.ddcat.entity.dept.SysDept;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.service.SysDeptService;
@@ -31,20 +29,6 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
             nodeList.add(treeNode);
         }
         return TreeUtil.build(nodeList, -1L);
-    }
-
-    @Override
-    public void save(DeptSaveDTO dto) {
-        var entity = new SysDept();
-        BeanUtil.copyProperties(dto, entity);
-        // 新增则获取当前兄弟节点最后一个排序值加1作为sort值
-        if (entity.getId() == null) {
-            var sort = baseMapper.getSort(entity.getParentId());
-            entity.setSort(sort == null ? 0 : sort + 1);
-            baseMapper.insert(entity);
-        } else {
-            baseMapper.updateById(entity);
-        }
     }
 
     @Override

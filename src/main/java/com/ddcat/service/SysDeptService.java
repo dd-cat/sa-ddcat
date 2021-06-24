@@ -4,7 +4,6 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
 import com.ddcat.entity.dept.DeptPageDTO;
-import com.ddcat.entity.dept.DeptSaveDTO;
 import com.ddcat.entity.dept.SysDept;
 
 import java.util.List;
@@ -17,16 +16,11 @@ public interface SysDeptService extends BaseService<SysDept> {
     /**
      * 获取树形数据
      *
+     * @param all -
      * @return -
      */
     List<Tree<Long>> tree(Set<SysDept> all);
 
-    /**
-     * 保存
-     *
-     * @param dto -
-     */
-    void save(DeptSaveDTO dto);
 
     /**
      * 分页查询

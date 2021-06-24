@@ -3,8 +3,8 @@ package com.ddcat.service.impl;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
-import com.ddcat.entity.SysMenu;
-import com.ddcat.entity.SysRole;
+import com.ddcat.entity.menu.SysMenu;
+import com.ddcat.entity.role.SysRole;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class StpInterfaceImpl implements StpInterface {
             List<Long> roleIds = roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getId)
                     .collect(Collectors.toList());
             roleIds.forEach(roleId -> {
-                List<String> permissionList = menuService.findPermissionByRoleId(roleId).stream()
+                List<String> permissionList = menuService.findMenuByRoleId(roleId).stream()
                         .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
                         .collect(Collectors.toList());
                 permissions.addAll(permissionList);

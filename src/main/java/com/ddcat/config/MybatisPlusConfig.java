@@ -1,7 +1,6 @@
 package com.ddcat.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -29,10 +28,5 @@ public class MybatisPlusConfig {
         //乐观锁配置
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
-    }
-
-    @Bean
-    public ConfigurationCustomizer configurationCustomizer() {
-        return configuration -> configuration.setUseDeprecatedExecutor(false);
     }
 }
