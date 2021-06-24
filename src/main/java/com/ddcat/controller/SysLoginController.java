@@ -31,7 +31,6 @@ public class SysLoginController {
     /**
      * 用户退出登录
      */
-    @Log("用户退出登录")
     @DeleteMapping("logout")
     public void logout() {
         StpUtil.logout();

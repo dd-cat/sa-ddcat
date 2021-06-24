@@ -6,28 +6,21 @@ package com.ddcat.constant;
  * @author dd-cat
  */
 public interface Constants {
+    // =================== 版本信息 ===================
 
     /**
-     * 成功标记
+     * 当前版本号
      */
-    int SUCCESS = 200;
+    String VERSION_NO = "v1.0.0";
 
     /**
-     * 失败标记
+     * 开源地址
      */
-    int FAIL = 500;
+    String GITHUB_URL = "https://gitee.com/dd-cat/sa-ddcat";
 
     /**
-     * 默认成功消息
+     * 开发文档地址
      */
-    String DEFAULT_SUCCESS_MESSAGE = "Success!";
-    /**
-     * 默认失败消息
-     */
-    String DEFAULT_FAIL_MESSAGE = "Error!";
+    String DEV_DOC_URL = "http://baidu.com";
 
-    /**
-     * 用户默认ID 用来无需登录接口默认用户用
-     */
-    long USER_ID = 0L;
 }
