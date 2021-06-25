@@ -29,13 +29,13 @@ public class LogAspect {
     @SneakyThrows
     @Around("@annotation(sysLog)")
     public Object around(ProceedingJoinPoint point, com.ddcat.annotation.Log sysLog) {
-        String className = point.getTarget().getClass().getName();
-        String methodName = point.getSignature().getName();
+        var className = point.getTarget().getClass().getName();
+        var methodName = point.getSignature().getName();
 
         // 发送异步日志事件
-        Long startTime = System.currentTimeMillis();
+        var startTime = System.currentTimeMillis();
         Object obj;
-        SysLog l = new SysLog();
+        var l = new SysLog();
         l.setMethod(className + "." + methodName + "()");
         l.setParams(Arrays.toString(point.getArgs()));
         l.setTitle(sysLog.value());
@@ -48,7 +48,7 @@ public class LogAspect {
             Long endTime = System.currentTimeMillis();
             l.setTime(endTime - startTime);
             l.setCreateTime(LocalDateTime.now());
-            l.setCreateUserId(StpUtil.getLoginId());
+            l.setCreateUserId(StpUtil.getLoginIdAsLong());
             logService.save(l);
         }
         return obj;

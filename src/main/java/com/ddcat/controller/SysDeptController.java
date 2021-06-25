@@ -50,7 +50,7 @@ public class SysDeptController {
     @GetMapping("tree")
     @SaCheckLogin
     public List<Tree<Long>> tree() {
-        var all = new HashSet<SysDept>(service.list());
+        var all = new HashSet<>(service.list());
         return service.tree(all);
     }
 

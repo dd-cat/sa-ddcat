@@ -3,7 +3,6 @@ package com.ddcat.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.SysUser;
 import com.ddcat.entity.user.*;
 
 /**

@@ -3,11 +3,7 @@ package com.ddcat.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.SuperMapper;
-import com.ddcat.entity.SysUser;
-import com.ddcat.entity.user.UserOnlineListDTO;
-import com.ddcat.entity.user.UserOnlineListVO;
-import com.ddcat.entity.user.UserPageDTO;
-import com.ddcat.entity.user.UserPageVO;
+import com.ddcat.entity.user.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -17,6 +17,6 @@ public class SysDictItemServiceImpl extends BaseServiceImpl<SysDictItemMapper, S
     public void saveItem(DictItemSaveDTO dto) {
         var entity = new SysDictItem();
         BeanUtil.copyProperties(dto, entity);
-        saveOrUpdate(entity);
+        super.saveOrUpdate(entity);
     }
 }

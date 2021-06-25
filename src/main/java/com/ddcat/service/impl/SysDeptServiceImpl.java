@@ -33,7 +33,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
 
     @Override
     public IPage<SysDept> page(DeptPageDTO dto) {
-        return this.page(new Page<>(dto.getCurrent(), dto.getSize()));
+        return super.page(new Page<>(dto.getCurrent(), dto.getSize()));
     }
 
 }

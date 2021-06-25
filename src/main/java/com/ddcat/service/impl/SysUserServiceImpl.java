@@ -7,12 +7,10 @@ import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.entity.SysUser;
 import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.entity.user.*;
@@ -31,7 +29,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +48,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public void saveOrUpdate(UserSaveDTO dto) {
         // 验证账号是否已经存在
-        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
+        var queryWrapper = Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getAccount, dto.getAccount());
         if (dto.getId() != null) {
             queryWrapper.ne(SysUser::getId, dto.getId());
@@ -73,7 +70,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             // 初始化密码
             entity.setPassword(password);
         }
-        this.saveOrUpdate(entity);
+        super.saveOrUpdate(entity);
     }
 
     @Override
@@ -81,19 +78,19 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         List<Long> ids = new ArrayList<>();
         var deptId = dto.getDeptId();
         if (deptId != null) {
-            deptMapper.selectTreeId(deptId);
+            ids = deptMapper.selectTreeId(deptId);
         }
         return baseMapper.page(new Page<>(dto.getCurrent(), dto.getSize()), dto, ids);
     }
 
     @Override
     public SaTokenInfo login(UserLoginDTO dto) {
-        LambdaQueryWrapper<SysUser> query;
+        var query = Wrappers.<SysUser>lambdaQuery();
         var number = NumberUtil.isNumber(dto.getKey());
         if (number) {
-            query = Wrappers.<SysUser>lambdaQuery().eq(!dto.getKey().isBlank(), SysUser::getMobile, dto.getKey());
+            query.eq(!dto.getKey().isBlank(), SysUser::getMobile, dto.getKey());
         } else {
-            query = Wrappers.<SysUser>lambdaQuery().eq(!dto.getKey().isBlank(), SysUser::getAccount, dto.getKey());
+            query.eq(!dto.getKey().isBlank(), SysUser::getAccount, dto.getKey());
         }
         var entity = baseMapper.selectOne(query);
         // 用户不存在
@@ -125,7 +122,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public UserLoginVO info() {
         var entity = this.getById(StpUtil.getLoginIdAsLong());
-        Set<String> permissions = new HashSet<>();
+        var permissions = new HashSet<String>();
         //通过用户角色ID 获取用户权限列表
         var roles = roleService.findRolesByUserId(entity.getId());
 

@@ -30,7 +30,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
                 .like(!dto.getName().isBlank(), SysRole::getName, dto.getName())
                 .like(!dto.getCode().isBlank(), SysRole::getCode, dto.getCode())
                 .like(!dto.getRemark().isBlank(), SysRole::getRemark, dto.getRemark());
-        return this.page(page, queryWrapper);
+        return super.page(page, queryWrapper);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
         var entity = new SysRole();
         BeanUtil.copyProperties(r, entity);
-        saveOrUpdate(entity);
+        super.saveOrUpdate(entity);
         var permissionIds = r.getPermissionIds();
         if (permissionIds.length > 0) {
             // 清除当前角色拥有权限

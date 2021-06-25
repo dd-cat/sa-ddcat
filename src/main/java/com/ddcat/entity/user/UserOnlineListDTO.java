@@ -12,5 +12,5 @@ public class UserOnlineListDTO extends Search {
     /**
      * 1：在綫 2：全部
      */
-    private int flag;
+    private Integer flag;
 }

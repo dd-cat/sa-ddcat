@@ -37,7 +37,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
                 dictItemMapper.update(null, updateWrapper);
             }
         }
-        saveOrUpdate(entity);
+        super.saveOrUpdate(entity);
     }
 
     @Override

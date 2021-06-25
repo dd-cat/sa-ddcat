@@ -6,7 +6,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.SysUser;
 import com.ddcat.entity.user.*;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.menu.ResultEnum;

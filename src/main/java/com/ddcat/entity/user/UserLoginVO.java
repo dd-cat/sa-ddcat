@@ -1,6 +1,5 @@
 package com.ddcat.entity.user;
 
-import com.ddcat.entity.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

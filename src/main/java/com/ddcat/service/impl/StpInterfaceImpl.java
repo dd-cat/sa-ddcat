@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -25,16 +24,15 @@ public class StpInterfaceImpl implements StpInterface {
     private final SysRoleService roleService;
     private final SysMenuService menuService;
 
-
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         if (StpUtil.getLoginType().equals(loginType)) {
-            Set<String> permissions = new HashSet<>();
+            var permissions = new HashSet<String>();
             // 通过用户角色 ID 获取用户权限列表
-            List<Long> roleIds = roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getId)
+            var roleIds = roleService.findRolesByUserId(Long.valueOf((String) loginId)).stream().map(SysRole::getId)
                     .collect(Collectors.toList());
             roleIds.forEach(roleId -> {
-                List<String> permissionList = menuService.findMenuByRoleId(roleId).stream()
+                var permissionList = menuService.findMenuByRoleId(roleId).stream()
                         .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
                         .collect(Collectors.toList());
                 permissions.addAll(permissionList);
