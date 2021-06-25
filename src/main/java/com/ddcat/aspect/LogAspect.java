@@ -45,7 +45,7 @@ public class LogAspect {
             l.setException(e.getMessage());
             throw e;
         } finally {
-            Long endTime = System.currentTimeMillis();
+            var endTime = System.currentTimeMillis();
             l.setTime(endTime - startTime);
             l.setCreateTime(LocalDateTime.now());
             l.setCreateUserId(StpUtil.getLoginIdAsLong());
