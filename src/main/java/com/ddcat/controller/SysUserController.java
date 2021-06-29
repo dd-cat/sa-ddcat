@@ -83,14 +83,14 @@ public class SysUserController {
     @Log("用户删除")
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:user:del")
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable long id) throws Exception {
         var loginId = StpUtil.getLoginIdAsLong();
         if (id == loginId) {
             throw new BusinessException(ResultEnum.B000002);
         }
         var entity = new SysUser();
         entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.deleteByIdWithFill(id);
     }
 
     /**

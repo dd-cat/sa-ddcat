@@ -7,6 +7,7 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.common.BaseEntity;
+import com.ddcat.entity.menu.MenuMetaVo;
 import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.mapper.SysMenuMapper;
@@ -31,15 +32,19 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenu> 
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
         for (var menu : all) {
             var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
-            var extra = new HashMap<String, Object>(4);
+            var extra = new HashMap<String, Object>();
             extra.put("path", menu.getPath());
             extra.put("icon", menu.getIcon());
-            if (!menu.getComponent().isBlank()) {
-                extra.put("component", menu.getComponent());
-            } else {
+            extra.put("component", menu.getComponent());
+            if (0 == menu.getType()) {
                 extra.put("component", "Layout");
+                extra.put("path", "/" + menu.getPath());
             }
             extra.put("permission", menu.getPermission());
+            extra.put("sort", menu.getSort());
+            extra.put("type", menu.getType());
+            extra.put("createTime", menu.getCreateTime());
+            extra.put("meta", new MenuMetaVo(menu.getName(), menu.getIcon(), true));
             treeNode.setExtra(extra);
             nodeList.add(treeNode);
         }

@@ -17,5 +17,6 @@ public class UserLoginDTO {
     /**
      * 密码
      */
+    @NotBlank(message = "密码必填")
     private String password;
 }

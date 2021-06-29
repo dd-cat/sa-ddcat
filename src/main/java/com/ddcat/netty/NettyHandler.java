@@ -2,22 +2,17 @@ package com.ddcat.netty;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.ddcat.constant.NettyConstant;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.AttributeKey;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * WebSocket连接数据接收处理类
@@ -28,12 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @ChannelHandler.Sharable
 public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
-    private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-
-    /**
-     * 存放用户ID与Chanel的对应信息
-     */
-    public static Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -48,7 +37,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端连接：{}", ctx.channel().id());
-        channels.add(ctx.channel());
+        NettyChannelPool.channels.add(ctx.channel());
         super.channelActive(ctx);
     }
 
@@ -63,11 +52,11 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         //防止被顶下线用户websocket 没有及时断开 对比Channel是否和当前在线的是否一致
         var key = AttributeKey.valueOf(NettyConstant.USER_ID);
         var userId = ctx.channel().attr(key).get();
-        var channel = userChannelMap.get(userId);
+        var channel = NettyChannelPool.userChannelMap.get(userId);
         if (channel != null && ctx.channel().id().asShortText().equals(channel.id().asShortText())) {
-            userChannelMap.remove(userId);
+            NettyChannelPool.userChannelMap.remove(userId);
         }
-        channels.remove(ctx.channel());
+        NettyChannelPool.channels.remove(ctx.channel());
         super.channelInactive(ctx);
     }
 
@@ -127,7 +116,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         var loginId = (String) StpUtil.getLoginIdByToken(token);
         if (loginId.isBlank() && Long.parseLong(loginId) > 0) {
             //如果之前有连接 先关闭 只保留一个在线用户
-            var channel = userChannelMap.get(loginId);
+            var channel = NettyChannelPool.userChannelMap.get(loginId);
             if (channel != null) {
                 channel.writeAndFlush(new CloseWebSocketFrame());
             }
@@ -135,7 +124,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
             var key = AttributeKey.valueOf(NettyConstant.USER_ID);
             ctx.channel().attr(key).setIfAbsent(loginId);
 
-            userChannelMap.put(loginId, ctx.channel());
+            NettyChannelPool.userChannelMap.put(loginId, ctx.channel());
         }
         // 如果 URL 包含参数，需要处理
         if (uri.startsWith(NettyConstant.PATH)) {

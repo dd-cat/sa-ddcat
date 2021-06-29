@@ -10,4 +10,8 @@ public interface RedisKeyConstant {
      * 字典
      */
     String DICT = "dict:";
+    /**
+     * 用户
+     */
+    String USER = "user";
 }

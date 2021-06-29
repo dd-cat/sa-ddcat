@@ -18,7 +18,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @author dd-cat
  */
 @Configuration
-//开启缓存
 @EnableCaching
 public class RedisConfig {
 

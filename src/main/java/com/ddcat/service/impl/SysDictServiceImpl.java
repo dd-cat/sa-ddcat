@@ -1,14 +1,17 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.dict.DictSaveDTO;
 import com.ddcat.entity.dict.SysDict;
 import com.ddcat.entity.dict.SysDictItem;
+import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDictItemMapper;
 import com.ddcat.mapper.SysDictMapper;
+import com.ddcat.menu.ResultEnum;
 import com.ddcat.service.SysDictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,6 +28,16 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
 
     @Override
     public void save(DictSaveDTO dto) {
+        LambdaQueryWrapper<SysDict> queryWrapper = Wrappers.<SysDict>lambdaQuery()
+                .eq(SysDict::getType, dto.getType());
+        if (dto.getId() != null) {
+            queryWrapper.ne(SysDict::getId, dto.getId());
+        }
+        Integer count = baseMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ResultEnum.B000007);
+        }
+
         var entity = new SysDict();
         BeanUtil.copyProperties(dto, entity);
         //先修改子集

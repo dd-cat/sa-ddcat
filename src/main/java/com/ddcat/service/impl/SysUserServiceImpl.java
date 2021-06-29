@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
+import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.entity.user.*;
@@ -18,7 +19,7 @@ import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
 import com.ddcat.mapper.SysUserMapper;
 import com.ddcat.menu.ResultEnum;
-import com.ddcat.netty.NettyHandler;
+import com.ddcat.netty.NettyChannelPool;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
@@ -105,12 +106,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         }
         //登录
         StpUtil.login(entity.getId());
+        //缓存用户信息
+        StpUtil.getTokenSession().setAttribute(RedisKeyConstant.USER, entity);
         return StpUtil.getTokenInfo();
     }
 
     @Override
     public IPage<UserOnlineListVO> online(UserOnlineListDTO dto) {
-        var dataMap = NettyHandler.userChannelMap;
+        var dataMap = NettyChannelPool.userChannelMap;
         var ids = dataMap.keySet();
         if (ids.isEmpty()) {
             ids = new HashSet<>();
