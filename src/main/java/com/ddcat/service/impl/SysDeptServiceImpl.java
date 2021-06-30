@@ -48,7 +48,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
         if (dto.getId() != null) {
             queryWrapper.ne(SysDept::getId, dto.getId());
         }
-        Integer count = baseMapper.selectCount(queryWrapper);
+        var count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000008);
         }

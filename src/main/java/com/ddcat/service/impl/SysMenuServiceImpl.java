@@ -71,7 +71,6 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenu> 
                     .filter(permission -> 2 != permission.getType())
                     .collect(Collectors.toList());
             all.addAll(collect);
-
         });
         var personSet = new TreeSet<SysMenu>(Comparator.comparing(BaseEntity::getId));
         personSet.addAll(all);

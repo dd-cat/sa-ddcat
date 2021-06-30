@@ -1,7 +1,6 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
@@ -28,12 +27,12 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
 
     @Override
     public void saveOrUpdate(DictDTO dto) {
-        LambdaQueryWrapper<SysDict> queryWrapper = Wrappers.<SysDict>lambdaQuery()
+        var queryWrapper = Wrappers.<SysDict>lambdaQuery()
                 .eq(SysDict::getType, dto.getType());
         if (dto.getId() != null) {
             queryWrapper.ne(SysDict::getId, dto.getId());
         }
-        Integer count = baseMapper.selectCount(queryWrapper);
+        var count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000007);
         }

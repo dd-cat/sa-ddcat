@@ -1,7 +1,6 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.dict.DictItemDTO;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class SysDictItemServiceImpl extends BaseServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
     @Override
     public void saveOrUpdate(DictItemDTO dto) {
-        LambdaQueryWrapper<SysDictItem> queryWrapper = Wrappers.<SysDictItem>lambdaQuery()
+        var queryWrapper = Wrappers.<SysDictItem>lambdaQuery()
                 .eq(SysDictItem::getType, dto.getType())
                 .and(i ->
                         i.eq(SysDictItem::getName, dto.getName())
@@ -28,7 +27,7 @@ public class SysDictItemServiceImpl extends BaseServiceImpl<SysDictItemMapper, S
         if (dto.getId() != null) {
             queryWrapper.ne(SysDictItem::getId, dto.getId());
         }
-        Integer count = baseMapper.selectCount(queryWrapper);
+        var count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000008);
         }

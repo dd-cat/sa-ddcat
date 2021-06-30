@@ -41,7 +41,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
         if (r.getId() != null) {
             queryWrapper.ne(SysRole::getId, r.getId());
         }
-        Integer count = baseMapper.selectCount(queryWrapper);
+        var count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000006);
         }
