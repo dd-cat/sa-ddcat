@@ -5,7 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.annotation.Log;
 import com.ddcat.constant.RedisKeyConstant;
-import com.ddcat.entity.dict.DictItemSaveDTO;
+import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.DictItemUpdateDTO;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.service.SysDictItemService;
@@ -64,8 +64,8 @@ public class SysDictItemController {
     @PostMapping
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
-    public void saveItem(@Valid @RequestBody DictItemSaveDTO dto) {
-        service.saveItem(dto);
+    public void saveOrUpdate(@Valid @RequestBody DictItemDTO dto) {
+        service.saveOrUpdate(dto);
     }
 
     /**

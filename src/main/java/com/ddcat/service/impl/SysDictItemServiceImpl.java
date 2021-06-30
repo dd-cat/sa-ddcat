@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
-import com.ddcat.entity.dict.DictItemSaveDTO;
+import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDictItemMapper;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysDictItemServiceImpl extends BaseServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
     @Override
-    public void saveItem(DictItemSaveDTO dto) {
+    public void saveOrUpdate(DictItemDTO dto) {
         LambdaQueryWrapper<SysDictItem> queryWrapper = Wrappers.<SysDictItem>lambdaQuery()
                 .eq(SysDictItem::getType, dto.getType())
                 .and(i ->

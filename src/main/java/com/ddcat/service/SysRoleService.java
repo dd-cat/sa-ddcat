@@ -3,7 +3,7 @@ package com.ddcat.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
 import com.ddcat.entity.role.RolePageDTO;
-import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.SysRole;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public interface SysRoleService extends BaseService<SysRole> {
      *
      * @param dto -
      */
-    void saveOrUpdate(RoleSaveDTO dto);
+    void saveOrUpdate(RoleDTO dto);
 
     /**
      * 删除

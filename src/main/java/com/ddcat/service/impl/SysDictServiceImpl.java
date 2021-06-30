@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
-import com.ddcat.entity.dict.DictSaveDTO;
+import com.ddcat.entity.dict.DictDTO;
 import com.ddcat.entity.dict.SysDict;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.exception.BusinessException;
@@ -27,7 +27,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
     private final SysDictItemMapper dictItemMapper;
 
     @Override
-    public void save(DictSaveDTO dto) {
+    public void saveOrUpdate(DictDTO dto) {
         LambdaQueryWrapper<SysDict> queryWrapper = Wrappers.<SysDict>lambdaQuery()
                 .eq(SysDict::getType, dto.getType());
         if (dto.getId() != null) {

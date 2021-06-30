@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class DeptSaveDTO {
+public class DeptDTO {
 
     private Long id;
     /**

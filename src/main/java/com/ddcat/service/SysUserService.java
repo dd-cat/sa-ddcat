@@ -15,7 +15,7 @@ public interface SysUserService extends BaseService<SysUser> {
      *
      * @param dto -
      */
-    void saveOrUpdate(UserSaveDTO dto);
+    void saveOrUpdate(UserDTO dto);
 
     /**
      * 分页查询

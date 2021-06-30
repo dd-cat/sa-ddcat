@@ -10,7 +10,7 @@
         (select group_concat(d.name) from sys_user_role c left join sys_role d on c.role_id=d.id WHERE
         find_in_set(c.user_id,a.id)) role_name
         FROM sys_user a
-        LEFT JOIN sys_dept b ON a.dept_id = b.id
+        LEFT JOIN sys_dept b ON a.dept_id = b.id and b.flag = 0
         WHERE a.flag = 0
         <if test="dto.account != null and dto.account != ''">
             AND a.account LIKE "%"#{dto.account}"%"

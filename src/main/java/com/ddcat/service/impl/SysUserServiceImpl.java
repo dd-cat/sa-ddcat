@@ -47,7 +47,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private final SysMenuService menuService;
 
     @Override
-    public void saveOrUpdate(UserSaveDTO dto) {
+    public void saveOrUpdate(UserDTO dto) {
         // 验证账号是否已经存在
         var queryWrapper = Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getAccount, dto.getAccount());
@@ -72,6 +72,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             entity.setPassword(password);
         }
         super.saveOrUpdate(entity);
+        //重新缓存用户信息
+        StpUtil.getTokenSession().setAttribute(RedisKeyConstant.USER, entity);
     }
 
     @Override

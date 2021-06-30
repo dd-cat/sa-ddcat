@@ -4,7 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.menu.MenuSaveDTO;
+import com.ddcat.entity.menu.MenuDTO;
 import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +60,7 @@ public class SysMenuController {
     @Log("菜单保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:menu:add", "sys:menu:edit"})
-    public void saveOrUpdate(@Valid @RequestBody MenuSaveDTO dto) {
+    public void saveOrUpdate(@Valid @RequestBody MenuDTO dto) {
         var entity = new SysMenu();
         BeanUtils.copyProperties(dto, entity);
         service.saveOrUpdate(entity);

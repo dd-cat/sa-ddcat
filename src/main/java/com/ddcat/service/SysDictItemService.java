@@ -1,7 +1,7 @@
 package com.ddcat.service;
 
 import com.ddcat.base.BaseService;
-import com.ddcat.entity.dict.DictItemSaveDTO;
+import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.SysDictItem;
 
 /**
@@ -14,5 +14,5 @@ public interface SysDictItemService extends BaseService<SysDictItem> {
      *
      * @param dto -
      */
-    void saveItem(DictItemSaveDTO dto);
+    void saveOrUpdate(DictItemDTO dto);
 }

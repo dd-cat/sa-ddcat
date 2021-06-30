@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class MenuSaveDTO {
+public class MenuDTO {
 
     private Long id;
     /**

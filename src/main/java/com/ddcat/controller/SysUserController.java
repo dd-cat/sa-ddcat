@@ -73,7 +73,7 @@ public class SysUserController {
     @Log("用户保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:user:add", "sys:user:edit"})
-    public void saveOrUpdate(@Valid @RequestBody UserSaveDTO dto) {
+    public void saveOrUpdate(@Valid @RequestBody UserDTO dto) {
         service.saveOrUpdate(dto);
     }
 

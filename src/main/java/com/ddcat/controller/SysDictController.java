@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.annotation.Log;
+import com.ddcat.entity.dict.DictDTO;
 import com.ddcat.entity.dict.DictPageDTO;
-import com.ddcat.entity.dict.DictSaveDTO;
 import com.ddcat.entity.dict.SysDict;
 import com.ddcat.service.SysDictService;
 import lombok.RequiredArgsConstructor;
@@ -60,8 +60,8 @@ public class SysDictController {
     @Log("字典保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
-    public void saveOrUpdate(@Valid @RequestBody DictSaveDTO dto) {
-        service.save(dto);
+    public void saveOrUpdate(@Valid @RequestBody DictDTO dto) {
+        service.saveOrUpdate(dto);
     }
 
     /**

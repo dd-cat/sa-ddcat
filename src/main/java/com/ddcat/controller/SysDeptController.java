@@ -5,12 +5,11 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
+import com.ddcat.entity.dept.DeptDTO;
 import com.ddcat.entity.dept.DeptPageDTO;
-import com.ddcat.entity.dept.DeptSaveDTO;
 import com.ddcat.entity.dept.SysDept;
 import com.ddcat.service.SysDeptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -62,10 +61,8 @@ public class SysDeptController {
     @Log("组织保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dept:add", "sys:dept:edit"})
-    public void save(@Valid @RequestBody DeptSaveDTO dto) {
-        var entity = new SysDept();
-        BeanUtils.copyProperties(dto, entity);
-        service.saveOrUpdate(entity);
+    public void saveOrUpdate(@Valid @RequestBody DeptDTO dto) {
+        service.saveOrUpdate(dto);
     }
 
     /**

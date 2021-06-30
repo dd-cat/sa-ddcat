@@ -1,15 +1,20 @@
 package com.ddcat.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
+import com.ddcat.entity.dept.DeptDTO;
 import com.ddcat.entity.dept.DeptPageDTO;
 import com.ddcat.entity.dept.SysDept;
+import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
+import com.ddcat.menu.ResultEnum;
 import com.ddcat.service.SysDeptService;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +39,23 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDept> 
     @Override
     public IPage<SysDept> page(DeptPageDTO dto) {
         return super.page(new Page<>(dto.getCurrent(), dto.getSize()));
+    }
+
+    @Override
+    public void saveOrUpdate(DeptDTO dto) {
+        var queryWrapper = Wrappers.<SysDept>lambdaQuery()
+                .eq(SysDept::getCode, dto.getCode());
+        if (dto.getId() != null) {
+            queryWrapper.ne(SysDept::getId, dto.getId());
+        }
+        Integer count = baseMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ResultEnum.B000008);
+        }
+
+        var entity = new SysDept();
+        BeanUtil.copyProperties(dto, entity);
+        this.saveOrUpdate(entity);
     }
 
 }

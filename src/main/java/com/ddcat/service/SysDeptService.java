@@ -4,6 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.base.BaseService;
 import com.ddcat.entity.dept.DeptPageDTO;
+import com.ddcat.entity.dept.DeptDTO;
 import com.ddcat.entity.dept.SysDept;
 
 import java.util.List;
@@ -29,5 +30,12 @@ public interface SysDeptService extends BaseService<SysDept> {
      * @return -
      */
     IPage<SysDept> page(DeptPageDTO dto);
+
+    /**
+     * 保存or修改
+     *
+     * @param dto -
+     */
+    void saveOrUpdate(DeptDTO dto);
 
 }

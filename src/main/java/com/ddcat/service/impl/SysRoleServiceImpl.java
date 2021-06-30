@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.role.RolePageDTO;
-import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysRoleMapper;
@@ -35,7 +35,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(RoleSaveDTO r) {
+    public void saveOrUpdate(RoleDTO r) {
         var queryWrapper = Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getCode, r.getCode());
         if (r.getId() != null) {

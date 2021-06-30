@@ -5,7 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.role.RolePageDTO;
-import com.ddcat.entity.role.RoleSaveDTO;
+import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class SysRoleController {
     @Log("角色保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:role:add", "sys:role:edit"})
-    public void saveOrUpdate(@Valid @RequestBody RoleSaveDTO dto) {
+    public void saveOrUpdate(@Valid @RequestBody RoleDTO dto) {
         service.saveOrUpdate(dto);
     }
 

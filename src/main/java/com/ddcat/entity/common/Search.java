@@ -1,11 +1,13 @@
 package com.ddcat.entity.common;
 
+import com.google.common.collect.Maps;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 搜索封装类
@@ -43,7 +45,7 @@ public class Search implements Serializable {
     /**
      * 页大小 默认10
      */
-    @Min(value = 1, message = "每页数据数量最小为1")
+    @Min(value = 10, message = "每页数据数量最小为10")
     @Max(value = 1000, message = "每页数据数量最大为1000")
     @NotNull(message = "每页数据数量必填")
     private int size = 10;
@@ -55,4 +57,8 @@ public class Search implements Serializable {
      * 排序方式：asc,desc
      */
     private String order;
+    /**
+     * 自定义SQL（SQL标识，SQL内容）
+     */
+    private transient Map<String, String> sqlMap = Maps.newHashMap();
 }

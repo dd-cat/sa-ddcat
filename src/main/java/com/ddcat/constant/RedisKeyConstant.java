@@ -9,7 +9,7 @@ public interface RedisKeyConstant {
     /**
      * 字典
      */
-    String DICT = "dict:";
+    String DICT = "dict";
     /**
      * 用户
      */

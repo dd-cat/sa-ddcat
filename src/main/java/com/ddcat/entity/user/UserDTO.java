@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @author dd-cat
  */
 @Data
-public class UserSaveDTO {
+public class UserDTO {
     private Long id;
     /**
      * 账户
