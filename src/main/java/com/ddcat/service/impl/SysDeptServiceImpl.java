@@ -12,9 +12,9 @@ import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.entity.dept.DeptDTO;
 import com.ddcat.entity.dept.DeptPageDTO;
 import com.ddcat.entity.dept.SysDept;
+import com.ddcat.enums.ResultEnum;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysDeptMapper;
-import com.ddcat.menu.ResultEnum;
 import com.ddcat.service.SysDeptService;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,8 @@ package com.ddcat.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import com.ddcat.entity.common.Result;
+import com.ddcat.enums.ResultEnum;
 import com.ddcat.exception.BusinessException;
-import com.ddcat.menu.ResultEnum;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,6 @@
 package com.ddcat.entity.common;
 
-import com.ddcat.menu.ResultEnum;
+import com.ddcat.enums.ResultEnum;
 import lombok.Data;
 
 import java.io.Serializable;

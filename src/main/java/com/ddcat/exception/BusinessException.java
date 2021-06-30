@@ -1,6 +1,6 @@
 package com.ddcat.exception;
 
-import com.ddcat.menu.ResultEnum;
+import com.ddcat.enums.ResultEnum;
 import lombok.Getter;
 
 /**

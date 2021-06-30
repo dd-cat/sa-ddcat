@@ -1,4 +1,4 @@
-package com.ddcat.menu;
+package com.ddcat.enums;
 
 import lombok.Getter;
 
