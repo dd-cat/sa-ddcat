@@ -1,6 +1,7 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,9 +28,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
         var page = new Page<SysRole>(dto.getCurrent(), dto.getSize());
         // 构建查询条件
         var queryWrapper = Wrappers.<SysRole>lambdaQuery()
-                .like(!dto.getName().isBlank(), SysRole::getName, dto.getName())
-                .like(!dto.getCode().isBlank(), SysRole::getCode, dto.getCode())
-                .like(!dto.getRemark().isBlank(), SysRole::getRemark, dto.getRemark());
+                .like(CharSequenceUtil.isNotBlank(dto.getName()), SysRole::getName, dto.getName())
+                .like(CharSequenceUtil.isNotBlank(dto.getCode()), SysRole::getCode, dto.getCode())
+                .like(CharSequenceUtil.isNotBlank(dto.getRemark()), SysRole::getRemark, dto.getRemark());
         return super.page(page, queryWrapper);
     }
 

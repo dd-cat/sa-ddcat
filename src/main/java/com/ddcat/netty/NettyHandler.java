@@ -1,6 +1,7 @@
 package com.ddcat.netty;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.ddcat.constant.NettyConstant;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -114,7 +115,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         var token = params.get("token");
 
         var loginId = (String) StpUtil.getLoginIdByToken(token);
-        if (loginId.isBlank() && Long.parseLong(loginId) > 0) {
+        if (CharSequenceUtil.isNotBlank(loginId) && Long.parseLong(loginId) > 0) {
             //如果之前有连接 先关闭 只保留一个在线用户
             var channel = NettyChannelPool.userChannelMap.get(loginId);
             if (channel != null) {

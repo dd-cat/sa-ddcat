@@ -3,6 +3,7 @@ package com.ddcat.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
@@ -59,7 +60,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             throw new BusinessException(ResultEnum.B000003);
         }
         // 验证身份证信息
-        if (!dto.getIdCard().isBlank()) {
+        if (CharSequenceUtil.isNotBlank(dto.getIdCard())) {
             boolean validCard = IdcardUtil.isValidCard(dto.getIdCard());
             if (!validCard) {
                 throw new BusinessException(ResultEnum.B000004);
@@ -91,9 +92,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         var query = Wrappers.<SysUser>lambdaQuery();
         var number = NumberUtil.isNumber(dto.getKey());
         if (number) {
-            query.eq(!dto.getKey().isBlank(), SysUser::getMobile, dto.getKey());
+            query.eq(CharSequenceUtil.isNotBlank(dto.getKey()), SysUser::getMobile, dto.getKey());
         } else {
-            query.eq(!dto.getKey().isBlank(), SysUser::getAccount, dto.getKey());
+            query.eq(CharSequenceUtil.isNotBlank(dto.getKey()), SysUser::getAccount, dto.getKey());
         }
         var entity = baseMapper.selectOne(query);
         // 用户不存在

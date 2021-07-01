@@ -1,6 +1,7 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.base.BaseServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
@@ -40,7 +41,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
         var entity = new SysDict();
         BeanUtil.copyProperties(dto, entity);
         //先修改子集
-        if (dto.getId() != null && !dto.getType().isBlank()) {
+        if (dto.getId() != null && CharSequenceUtil.isNotBlank(dto.getType())) {
             var dict = baseMapper.selectById(dto.getId());
             if (!dict.getType().equals(dto.getType())) {
                 var updateWrapper = Wrappers.<SysDictItem>lambdaUpdate()
