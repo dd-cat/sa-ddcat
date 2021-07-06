@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class SysUserController {
     @Log("当前登录用户信息")
     @GetMapping("info")
     @SaCheckLogin
-    public UserLoginVO info() {
+    public UserLoginVO info(HttpServletRequest request) {
         return service.info();
     }
 
@@ -111,6 +112,7 @@ public class SysUserController {
      * @param file excel文件
      */
     @PostMapping("import")
+    @SaCheckPermission("sys:user:import")
     public void importData(MultipartFile file) throws IOException {
         var list = ExcelUtils.importExcel(file, 0, 1, UserImportVO.class);
         for (var vo : list) {
@@ -127,6 +129,7 @@ public class SysUserController {
      * @param dto -
      */
     @PutMapping("/updatePassword")
+    @SaCheckPermission("sys:user:edit")
     public void updatePassword(@RequestBody UserPasswordDTO dto) {
         service.updatePassword(dto);
     }

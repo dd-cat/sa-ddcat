@@ -20,7 +20,7 @@
 
         <hutool.version>5.6.4</hutool.version>
         <lombok.version>1.18.20</lombok.version>
-        <sa-token.version>1.20.0</sa-token.version>
+        <sa-token.version>1.21.0</sa-token.version>
         <easypoi.version>4.2.0</easypoi.version>
     </properties>
 

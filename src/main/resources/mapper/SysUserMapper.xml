@@ -7,8 +7,8 @@
         a.account,
         a.username,
         b.name dept_name,
-        (select group_concat(d.name) from sys_user_role c left join sys_role d on c.role_id=d.id WHERE
-        find_in_set(c.user_id,a.id)) role_name
+        a.mobile,
+        a.create_time
         FROM sys_user a
         LEFT JOIN sys_dept b ON a.dept_id = b.id and b.flag = 0
         WHERE a.flag = 0

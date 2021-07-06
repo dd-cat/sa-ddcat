@@ -74,7 +74,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         }
         super.saveOrUpdate(entity);
         //重新缓存用户信息
-        StpUtil.getTokenSession().setAttribute(RedisKeyConstant.USER, entity);
+        StpUtil.getTokenSession().set(RedisKeyConstant.USER, entity);
     }
 
     @Override
@@ -83,6 +83,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         var deptId = dto.getDeptId();
         if (deptId != null) {
             ids = deptMapper.selectTreeId(deptId);
+            ids.add(dto.getDeptId());
         }
         return baseMapper.page(new Page<>(dto.getCurrent(), dto.getSize()), dto, ids);
     }
@@ -110,7 +111,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         //登录
         StpUtil.login(entity.getId());
         //缓存用户信息
-        StpUtil.getTokenSession().setAttribute(RedisKeyConstant.USER, entity);
+        StpUtil.getTokenSession().set(RedisKeyConstant.USER, entity);
         return StpUtil.getTokenInfo();
     }
 
