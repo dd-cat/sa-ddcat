@@ -164,7 +164,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (id == loginId) {
             throw new BusinessException(ResultEnum.B000002);
         }
-        int i = baseMapper.deleteById(id);
+        var i = baseMapper.deleteById(id);
         // 删除用户角色关联
         if (i > 0) {
             baseMapper.deleteUserById(id);

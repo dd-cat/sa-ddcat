@@ -56,7 +56,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     public void removeById(long id) {
-        SysDict dict = baseMapper.selectById(id);
+        var dict = baseMapper.selectById(id);
         if (dict != null) {
             // 删除字典并删除字典项
             baseMapper.deleteById(id);

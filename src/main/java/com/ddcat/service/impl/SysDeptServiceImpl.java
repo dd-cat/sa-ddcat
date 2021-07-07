@@ -7,7 +7,6 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -79,14 +78,14 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public void removeById(long id) {
         // 查询是否有下级部门
-        LambdaQueryWrapper<SysDept> wrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id);
-        Integer count = baseMapper.selectCount(wrapper);
+        var wrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id);
+        var count = baseMapper.selectCount(wrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000010);
         }
         // 查询部门是否有关联用户
-        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id);
-        Integer userCount = userMapper.selectCount(queryWrapper);
+        var queryWrapper = Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id);
+        var userCount = userMapper.selectCount(queryWrapper);
         if (userCount > 0) {
             throw new BusinessException(ResultEnum.B000011);
         }
