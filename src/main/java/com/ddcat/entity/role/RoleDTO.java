@@ -31,5 +31,5 @@ public class RoleDTO {
     /**
      * 许可
      */
-    private long[] permissionIds;
+    private long[] menuIds;
 }

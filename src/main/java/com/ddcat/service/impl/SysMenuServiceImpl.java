@@ -6,6 +6,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.common.BaseEntity;
 import com.ddcat.entity.menu.MenuMetaVo;
 import com.ddcat.entity.menu.SysMenu;
@@ -14,6 +15,7 @@ import com.ddcat.mapper.SysMenuMapper;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -57,6 +59,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
+    @Cacheable(value = RedisKeyConstant.ROLE_MENU, key = "#roleId")
     public List<SysMenu> findMenuByRoleId(Long roleId) {
         return baseMapper.findMenuByRoleId(roleId);
     }
@@ -67,7 +70,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         var roleIds = roleService.findRolesByUserId(StpUtil.getLoginIdAsLong()).stream().map(SysRole::getId)
                 .collect(Collectors.toList());
         roleIds.forEach(roleId -> {
-            var collect = baseMapper.findMenuByRoleId(roleId).stream()
+            var collect = findMenuByRoleId(roleId).stream()
                     .filter(permission -> 2 != permission.getType())
                     .collect(Collectors.toList());
             all.addAll(collect);

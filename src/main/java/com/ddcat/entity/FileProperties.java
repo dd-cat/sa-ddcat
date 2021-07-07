@@ -2,11 +2,13 @@ package com.ddcat.entity;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @author dd-cat
  */
 @Data
+@Component
 @ConfigurationProperties(prefix = "file")
 public class FileProperties {
     /**

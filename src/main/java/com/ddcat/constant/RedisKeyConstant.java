@@ -14,4 +14,8 @@ public interface RedisKeyConstant {
      * 用户
      */
     String USER = "user";
+    /**
+     * 角色菜单
+     */
+    String ROLE_MENU = "role:menu";
 }

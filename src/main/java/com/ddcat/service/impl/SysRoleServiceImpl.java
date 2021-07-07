@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
@@ -13,6 +14,7 @@ import com.ddcat.enums.ResultEnum;
 import com.ddcat.exception.BusinessException;
 import com.ddcat.mapper.SysRoleMapper;
 import com.ddcat.service.SysRoleService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = RedisKeyConstant.ROLE_MENU, key = "#r.id", condition = "#r.menuIds.length > 0")
     public void saveOrUpdate(RoleDTO r) {
         var queryWrapper = Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getCode, r.getCode());
@@ -50,16 +53,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         var entity = new SysRole();
         BeanUtil.copyProperties(r, entity);
         super.saveOrUpdate(entity);
-        var permissionIds = r.getPermissionIds();
-        if (permissionIds.length > 0) {
+        var menuIds = r.getMenuIds();
+        if (menuIds.length > 0) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuById(entity.getId());
             // 新增当前角色拥有权限
-            baseMapper.insertMenu(entity.getId(), permissionIds);
+            baseMapper.insertMenu(entity.getId(), menuIds);
         }
     }
 
     @Override
+    @CacheEvict(value = RedisKeyConstant.ROLE_MENU, key = "#id")
     public void removeById(long id) {
         // 查询是否有用户关联角色
         var count = baseMapper.getUserCount(id);

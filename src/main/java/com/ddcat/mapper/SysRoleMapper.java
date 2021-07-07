@@ -25,17 +25,17 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     /**
      * 新增当前用户拥有权限
      *
-     * @param roleId        -
-     * @param permissionIds -
+     * @param roleId  -
+     * @param menuIds -
      * @return -
      */
     @Insert("<script>" +
-            "insert into role_menu(role_id, permission_id) value" +
-            "<foreach collection='permissionIds' item='permissionId' separator=','>" +
-            "(${roleId},${permissionId})" +
+            "insert into role_menu(role_id, menu_id) value" +
+            "<foreach collection='menuIds' item='menuId' separator=','>" +
+            "(${roleId},${menuId})" +
             "</foreach>" +
             "</script>")
-    long insertMenu(@Param("roleId") long roleId, @Param("permissionIds") long[] permissionIds);
+    long insertMenu(@Param("roleId") long roleId, @Param("menuIds") long[] menuIds);
 
     /**
      * 通过用户ID，查询角色信息
