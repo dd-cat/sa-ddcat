@@ -11,7 +11,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ddcat.base.BaseServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.menu.SysMenu;
 import com.ddcat.entity.role.SysRole;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Value("${password:e10adc3949ba59abbe56e057f20f883e}")
     private String password;
@@ -156,5 +156,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         baseMapper.updateById(user);
         // 修改完密码后注销
         StpUtil.logout();
+    }
+
+    @Override
+    public void removeById(long id) {
+        var loginId = StpUtil.getLoginIdAsLong();
+        if (id == loginId) {
+            throw new BusinessException(ResultEnum.B000002);
+        }
+        int i = baseMapper.deleteById(id);
+        // 删除用户角色关联
+        if (i > 0) {
+            baseMapper.deleteUserById(id);
+        }
     }
 }

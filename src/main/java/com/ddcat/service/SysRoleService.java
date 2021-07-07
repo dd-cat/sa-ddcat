@@ -1,9 +1,9 @@
 package com.ddcat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ddcat.base.BaseService;
-import com.ddcat.entity.role.RolePageDTO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.role.RoleDTO;
+import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author dd-cat
  */
-public interface SysRoleService extends BaseService<SysRole> {
+public interface SysRoleService extends IService<SysRole> {
 
     /**
      * 分页查询

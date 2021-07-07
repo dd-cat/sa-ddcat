@@ -5,7 +5,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ddcat.base.BaseServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author dd-cat
  */
 @Service
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Override
     public IPage<SysRole> page(RolePageDTO dto) {
         var page = new Page<SysRole>(dto.getCurrent(), dto.getSize());
@@ -61,8 +61,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public void removeById(long id) {
-        var count = baseMapper.deleteById(id);
+        // 查询是否有用户关联角色
+        var count = baseMapper.getUserCount(id);
         if (count > 0) {
+            throw new BusinessException(ResultEnum.B000012);
+        }
+        var delCount = baseMapper.deleteById(id);
+        if (delCount > 0) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuById(id);
         }

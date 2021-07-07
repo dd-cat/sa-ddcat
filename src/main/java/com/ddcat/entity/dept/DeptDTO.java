@@ -1,6 +1,7 @@
 package com.ddcat.entity.dept;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ public class DeptDTO {
     /**
      * 头像
      */
-    private String avatar;
+    private MultipartFile avatar;
     /**
      * 父节点ID
      */

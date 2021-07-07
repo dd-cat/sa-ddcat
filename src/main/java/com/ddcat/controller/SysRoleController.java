@@ -4,8 +4,8 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
-import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.RoleDTO;
+import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
 import com.ddcat.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -70,8 +70,6 @@ public class SysRoleController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:role:del")
     public void delete(@PathVariable long id) {
-        var entity = new SysRole();
-        entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.removeById(id);
     }
 }

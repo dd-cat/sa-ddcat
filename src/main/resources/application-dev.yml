@@ -27,3 +27,8 @@ mysql-param: useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=t
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+file:
+  # 访问前缀
+  prefix: http://localhost:8080/file/ddcat/
+  # 服务器存储路径
+  path: /data/ddcat/

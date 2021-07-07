@@ -1,7 +1,7 @@
 package com.ddcat.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.ddcat.base.BaseService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.menu.SysMenu;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * @author dd-cat
  */
-public interface SysMenuService extends BaseService<SysMenu> {
+public interface SysMenuService extends IService<SysMenu> {
     /**
      * 获取树形数据
      *

@@ -75,8 +75,6 @@ public class SysDictController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:dict:del")
     public void delete(@PathVariable long id) {
-        var entity = new SysDict();
-        entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.removeById(id);
     }
 }

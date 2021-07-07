@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -57,11 +58,12 @@ public class SysDeptController {
      * 保存or修改
      *
      * @param dto -
+     * @throws IOException -
      */
     @Log("组织保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dept:add", "sys:dept:edit"})
-    public void saveOrUpdate(@Valid @RequestBody DeptDTO dto) {
+    public void saveOrUpdate(@Valid @RequestBody DeptDTO dto) throws IOException {
         service.saveOrUpdate(dto);
     }
 
@@ -86,8 +88,6 @@ public class SysDeptController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:dept:del")
     public void delete(@PathVariable long id) {
-        var entity = new SysDept();
-        entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.removeById(id);
     }
 }

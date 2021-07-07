@@ -2,18 +2,19 @@ package com.ddcat.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ddcat.base.BaseService;
-import com.ddcat.entity.dept.DeptPageDTO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.dept.DeptDTO;
+import com.ddcat.entity.dept.DeptPageDTO;
 import com.ddcat.entity.dept.SysDept;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author dd-cat
  */
-public interface SysDeptService extends BaseService<SysDept> {
+public interface SysDeptService extends IService<SysDept> {
     /**
      * 获取树形数据
      *
@@ -35,7 +36,15 @@ public interface SysDeptService extends BaseService<SysDept> {
      * 保存or修改
      *
      * @param dto -
+     * @throws IOException -
      */
-    void saveOrUpdate(DeptDTO dto);
+    void saveOrUpdate(DeptDTO dto) throws IOException;
+
+    /**
+     * 删除
+     *
+     * @param id -
+     */
+    void removeById(long id);
 
 }

@@ -91,8 +91,6 @@ public class SysDictItemController {
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission("sys:dict:del")
     public void deleteItem(@PathVariable long id) {
-        var entity = new SysDictItem();
-        entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.removeById(id);
     }
 }

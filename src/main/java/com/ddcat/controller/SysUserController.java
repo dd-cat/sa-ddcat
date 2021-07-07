@@ -2,13 +2,10 @@ package com.ddcat.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ddcat.annotation.Log;
 import com.ddcat.entity.user.*;
-import com.ddcat.enums.ResultEnum;
-import com.ddcat.exception.BusinessException;
 import com.ddcat.service.SysUserService;
 import com.ddcat.util.ExcelUtils;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +27,6 @@ import java.io.IOException;
 public class SysUserController {
 
     private final SysUserService service;
-
 
     /**
      * 当前登录用户信息
@@ -84,14 +80,8 @@ public class SysUserController {
     @Log("用户删除")
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:user:del")
-    public void delete(@PathVariable long id) throws Exception {
-        var loginId = StpUtil.getLoginIdAsLong();
-        if (id == loginId) {
-            throw new BusinessException(ResultEnum.B000002);
-        }
-        var entity = new SysUser();
-        entity.setId(id);
-        service.deleteByIdWithFill(id);
+    public void delete(@PathVariable long id) {
+        service.removeById(id);
     }
 
     /**

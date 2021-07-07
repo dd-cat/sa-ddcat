@@ -2,7 +2,7 @@ package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ddcat.base.BaseServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.enums.ResultEnum;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @author dd-cat
  */
 @Service
-public class SysDictItemServiceImpl extends BaseServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
+public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
     @Override
     public void saveOrUpdate(DictItemDTO dto) {
         var queryWrapper = Wrappers.<SysDictItem>lambdaQuery()

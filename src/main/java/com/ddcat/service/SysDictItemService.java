@@ -1,13 +1,13 @@
 package com.ddcat.service;
 
-import com.ddcat.base.BaseService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.SysDictItem;
 
 /**
  * @author dd-cat
  */
-public interface SysDictItemService extends BaseService<SysDictItem> {
+public interface SysDictItemService extends IService<SysDictItem> {
 
     /**
      * 字典项保存or修改

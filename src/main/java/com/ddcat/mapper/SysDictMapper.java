@@ -1,10 +1,10 @@
 package com.ddcat.mapper;
 
-import com.ddcat.base.SuperMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddcat.entity.dict.SysDict;
 
 /**
  * @author dd-cat
  */
-public interface SysDictMapper extends SuperMapper<SysDict> {
+public interface SysDictMapper extends BaseMapper<SysDict> {
 }

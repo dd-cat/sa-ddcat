@@ -1,6 +1,6 @@
 package com.ddcat.mapper;
 
-import com.ddcat.base.SuperMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddcat.entity.dept.SysDept;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author dd-cat
  */
-public interface SysDeptMapper extends SuperMapper<SysDept> {
+public interface SysDeptMapper extends BaseMapper<SysDept> {
 
     /**
      * 获取当前节点下所有节点ID

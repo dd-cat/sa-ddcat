@@ -2,13 +2,13 @@ package com.ddcat.service;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ddcat.base.BaseService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.user.*;
 
 /**
  * @author dd-cat
  */
-public interface SysUserService extends BaseService<SysUser> {
+public interface SysUserService extends IService<SysUser> {
 
     /**
      * 保存or修改
@@ -54,4 +54,11 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param dto -
      */
     void updatePassword(UserPasswordDTO dto);
+
+    /**
+     * 删除
+     *
+     * @param id -
+     */
+    void removeById(long id);
 }

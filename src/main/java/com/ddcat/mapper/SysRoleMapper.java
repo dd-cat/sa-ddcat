@@ -1,17 +1,18 @@
 package com.ddcat.mapper;
 
-import com.ddcat.base.SuperMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddcat.entity.role.SysRole;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 /**
  * @author dd-cat
  */
-public interface SysRoleMapper extends SuperMapper<SysRole> {
+public interface SysRoleMapper extends BaseMapper<SysRole> {
     /**
      * 清除当前用户拥有权限
      *
@@ -43,4 +44,13 @@ public interface SysRoleMapper extends SuperMapper<SysRole> {
      * @return -
      */
     List<SysRole> listRolesByUserId(Long userId);
+
+    /**
+     * 查询是否有用户关联角色
+     *
+     * @param id -
+     * @return -
+     */
+    @Select("select count(*) from user_role a inner join user b on a.user_id=b.id and b.flag=0 where a.role_id = #{id}")
+    int getUserCount(long id);
 }

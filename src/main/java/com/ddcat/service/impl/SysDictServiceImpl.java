@@ -3,7 +3,7 @@ package com.ddcat.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ddcat.base.BaseServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.dict.DictDTO;
 import com.ddcat.entity.dict.SysDict;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> implements SysDictService {
+public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
     private final SysDictItemMapper dictItemMapper;
 
@@ -56,7 +56,11 @@ public class SysDictServiceImpl extends BaseServiceImpl<SysDictMapper, SysDict> 
     @Override
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     public void removeById(long id) {
-        baseMapper.deleteById(id);
-        dictItemMapper.delete(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getDictId, id));
+        SysDict dict = baseMapper.selectById(id);
+        if (dict != null) {
+            // 删除字典并删除字典项
+            baseMapper.deleteById(id);
+            dictItemMapper.delete(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType, dict.getType()));
+        }
     }
 }

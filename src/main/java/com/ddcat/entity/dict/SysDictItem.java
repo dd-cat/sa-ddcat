@@ -11,10 +11,6 @@ import lombok.Data;
 @Data
 public class SysDictItem extends BaseEntity {
     /**
-     * 字典ID
-     */
-    private String dictId;
-    /**
      * 名称
      */
     private String name;

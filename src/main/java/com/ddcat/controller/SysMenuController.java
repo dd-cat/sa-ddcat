@@ -75,9 +75,7 @@ public class SysMenuController {
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:menu:del")
     public void delete(@PathVariable long id) {
-        var entity = new SysMenu();
-        entity.setId(id);
-        service.deleteByIdWithFill(entity);
+        service.removeById(id);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.ddcat.mapper;
 
-import com.ddcat.base.SuperMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddcat.entity.menu.SysMenu;
 import org.apache.ibatis.annotations.Select;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author dd-cat
  */
-public interface SysMenuMapper extends SuperMapper<SysMenu> {
+public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     /**
      * 通过角色ID获取菜单ID
