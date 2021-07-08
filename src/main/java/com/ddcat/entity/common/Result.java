@@ -3,27 +3,21 @@ package com.ddcat.entity.common;
 import com.ddcat.enums.ResultEnum;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * 响应信息主体
  *
  * @author dd-cat
  */
 @Data
-public class Result<T> implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Result<T> {
     /**
      * 状态码
      */
     private long code;
-
     /**
      * 消息内容
      */
     private String msg;
-
     /**
      * 业务数据
      */

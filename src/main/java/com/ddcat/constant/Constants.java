@@ -5,22 +5,27 @@ package com.ddcat.constant;
  *
  * @author dd-cat
  */
-public interface Constants {
+public final class Constants {
+    /**
+     * 私有构造方法避免创建该类的实例
+     */
+    private Constants() {
+    }
     // =================== 版本信息 ===================
 
     /**
      * 当前版本号
      */
-    String VERSION_NO = "v1.0.0";
+    public static final String VERSION_NO = "v1.0.0";
 
     /**
      * 开源地址
      */
-    String GITHUB_URL = "https://gitee.com/dd-cat/sa-ddcat";
+    public static final String GITHUB_URL = "https://gitee.com/dd-cat/sa-ddcat";
 
     /**
      * 开发文档地址
      */
-    String DEV_DOC_URL = "http://baidu.com";
+    public static final String DEV_DOC_URL = "http://baidu.com";
 
 }

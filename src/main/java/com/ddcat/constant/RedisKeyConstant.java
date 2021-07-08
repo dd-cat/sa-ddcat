@@ -5,17 +5,23 @@ package com.ddcat.constant;
  *
  * @author dd-cat
  */
-public interface RedisKeyConstant {
+public final class RedisKeyConstant {
+    /**
+     * 私有构造方法避免创建该类的实例
+     */
+    private RedisKeyConstant() {
+    }
+
     /**
      * 字典
      */
-    String DICT = "dict";
+    public static final String DICT = "dict";
     /**
      * 用户
      */
-    String USER = "user";
+    public static final String USER = "user";
     /**
      * 角色菜单
      */
-    String ROLE_MENU = "role:menu";
+    public static final String ROLE_MENU = "role:menu";
 }

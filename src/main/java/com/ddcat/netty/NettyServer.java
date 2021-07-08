@@ -33,7 +33,7 @@ public class NettyServer implements InitializingBean, DisposableBean {
             // 创建从线程组，处理主线程组分配下来的io操作
             workGroup = new NioEventLoopGroup();
 
-            ServerBootstrap serverBootstrap = new ServerBootstrap();
+            var serverBootstrap = new ServerBootstrap();
             serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024)
                     .group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
@@ -46,12 +46,8 @@ public class NettyServer implements InitializingBean, DisposableBean {
                 log.info("Netty server startup on port: {} (websocket) with context path '{}'", NettyConstant.PORT, NettyConstant.PATH);
             } else {
                 log.error("Netty server startup failed.");
-                if (bossGroup != null) {
-                    bossGroup.shutdownGracefully().sync();
-                }
-                if (workGroup != null) {
-                    workGroup.shutdownGracefully().sync();
-                }
+                bossGroup.shutdownGracefully().sync();
+                workGroup.shutdownGracefully().sync();
             }
         }
     }

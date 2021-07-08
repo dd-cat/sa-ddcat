@@ -5,17 +5,23 @@ package com.ddcat.constant;
  *
  * @author dd-cat
  */
-public interface NettyConstant {
+public final class NettyConstant {
+    /**
+     * 私有构造方法避免创建该类的实例
+     */
+    private NettyConstant() {
+    }
+
     /**
      * 监听端口
      */
-    Integer PORT = 12567;
+    public static final Integer PORT = 12567;
     /**
      * 请求路径
      */
-    String PATH = "/ws";
+    public static final String PATH = "/ws";
     /**
      * Netty 用户key
      */
-    String USER_ID = "user_id";
+    public static final String USER_ID = "user_id";
 }

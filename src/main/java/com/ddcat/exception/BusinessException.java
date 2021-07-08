@@ -10,9 +10,9 @@ import lombok.Getter;
  */
 @Getter
 public class BusinessException extends RuntimeException {
-    private long code;
+    private final long code;
 
-    private String message;
+    private final String message;
 
     public BusinessException(ResultEnum resultEnum) {
         this.code = resultEnum.getCode();

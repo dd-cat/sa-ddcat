@@ -17,10 +17,10 @@ public class NettyChannelPool {
     /**
      * 存放用户与Chanel的对应信息
      */
-    public Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
+    public final Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
     /**
      * 所有正在连接的Chanel都会存在这里面，所以也可以间接代表在线的客户端
      */
-    public ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 }
