@@ -117,7 +117,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public IPage<UserOnlineListVO> online(UserOnlineListDTO dto) {
-        var dataMap = NettyChannelPool.getUserChannelMap();
+        var dataMap = NettyChannelPool.userChannelMap;
         var ids = dataMap.keySet();
         if (ids.isEmpty()) {
             ids = new HashSet<>();

@@ -48,7 +48,7 @@ public class LogAspect {
             var endTime = System.currentTimeMillis();
             l.setTime(endTime - startTime);
             l.setCreateTime(LocalDateTime.now());
-            l.setCreateUserId(StpUtil.getLoginIdAsLong());
+            l.setCreateUserId(StpUtil.getLoginId(0L));
             logService.save(l);
         }
         return obj;

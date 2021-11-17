@@ -11,13 +11,13 @@ import lombok.Data;
 @Data
 public class SysDictItem extends BaseEntity {
     /**
-     * 名称
-     */
-    private String name;
-    /**
      * 类型
      */
     private String type;
+    /**
+     * 名称
+     */
+    private String name;
     /**
      * 值
      */

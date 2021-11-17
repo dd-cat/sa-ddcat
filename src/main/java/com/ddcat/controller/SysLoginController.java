@@ -13,7 +13,7 @@ import javax.validation.Valid;
 /**
  * @author dd-cat
  */
-@RequestMapping("login")
+@RequestMapping("auth")
 @RestController
 @RequiredArgsConstructor
 public class SysLoginController {
@@ -23,7 +23,7 @@ public class SysLoginController {
      * 用户认证
      */
     @Log("用户认证")
-    @PostMapping("auth")
+    @PostMapping("login")
     public SaTokenInfo login(@Valid @RequestBody UserLoginDTO dto) {
         return service.login(dto);
     }

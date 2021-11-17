@@ -22,7 +22,11 @@ public class UserDTO {
      * 姓名
      */
     @NotBlank(message = "姓名必填")
-    private String username;
+    private String name;
+    /**
+     * 头像
+     */
+    private String avatar;
     /**
      * 性别 0:男 1:女
      */

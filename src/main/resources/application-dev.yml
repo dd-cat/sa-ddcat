@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.164.128:3306/ddcat?${mysql-param}
+    url: jdbc:mysql://192.168.164.128:3306/sa_ddcat?${mysql-param}
     username: root
     password: 123456
     hikari:

@@ -5,7 +5,7 @@
         SELECT
         a.id,
         a.account,
-        a.username,
+        a.name,
         b.name dept_name,
         a.mobile,
         a.create_time
@@ -31,7 +31,7 @@
     </select>
 
     <select id="onlinePage" resultType="UserOnlineListVO">
-        SELECT id,username,'在线' status FROM sys_user
+        SELECT id,name,'在线' status FROM sys_user
         where flag = 0
         AND id IN (
         <foreach collection="ids" item="id" separator=",">
@@ -46,7 +46,7 @@
         )
         <if test="dto.flag != 1">
             UNION
-            SELECT id,username,'离线' status FROM sys_user
+            SELECT id,name,'离线' status FROM sys_user
             WHERE flag = 0
             AND id NOT IN (
             <foreach collection="ids" item="id" separator=",">

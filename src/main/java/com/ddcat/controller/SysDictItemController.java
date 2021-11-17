@@ -2,10 +2,14 @@ package com.ddcat.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.annotation.Log;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.dict.DictItemDTO;
+import com.ddcat.entity.dict.DictItemPageDTO;
 import com.ddcat.entity.dict.DictItemUpdateDTO;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.service.SysDictItemService;
@@ -39,6 +43,20 @@ public class SysDictItemController {
     @SaCheckLogin
     public SysDictItem getById(@PathVariable long id) {
         return service.getById(id);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param dto -
+     * @return -
+     */
+    @Log("字典项分页查询")
+    @PostMapping("page")
+    @SaCheckLogin
+    public IPage<SysDictItem> page(@Valid @RequestBody DictItemPageDTO dto) {
+        return service.page(new Page<>(dto.getCurrent(), dto.getSize()), Wrappers.<SysDictItem>lambdaQuery()
+                .like(CharSequenceUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName()));
     }
 
     /**

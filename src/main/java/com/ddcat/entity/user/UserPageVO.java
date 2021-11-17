@@ -20,7 +20,7 @@ public class UserPageVO {
     /**
      * 姓名
      */
-    private String username;
+    private String name;
     /**
      * 所属机构
      */

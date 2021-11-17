@@ -17,7 +17,7 @@ public class SysUser extends BaseEntity {
     /**
      * 用户名
      */
-    private String username;
+    private String name;
     /**
      * 性别 0:男 1:女
      */
