@@ -6,7 +6,6 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ddcat.annotation.Log;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.DictItemPageDTO;
@@ -38,7 +37,6 @@ public class SysDictItemController {
      *
      * @param id -
      */
-    @Log("字典项根据ID查询单个")
     @GetMapping("{id}")
     @SaCheckLogin
     public SysDictItem getById(@PathVariable long id) {
@@ -51,7 +49,6 @@ public class SysDictItemController {
      * @param dto -
      * @return -
      */
-    @Log("字典项分页查询")
     @PostMapping("page")
     @SaCheckLogin
     public IPage<SysDictItem> page(@Valid @RequestBody DictItemPageDTO dto) {
@@ -65,7 +62,6 @@ public class SysDictItemController {
      * @param type -
      * @return -
      */
-    @Log("根据type获取字典项")
     @GetMapping("type/{type}")
     @Cacheable(value = RedisKeyConstant.DICT, key = "#type")
     @SaCheckLogin
@@ -78,7 +74,6 @@ public class SysDictItemController {
      *
      * @param dto -
      */
-    @Log("字典项保存or修改")
     @PostMapping
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
@@ -91,7 +86,6 @@ public class SysDictItemController {
      *
      * @param dto -
      */
-    @Log("批量更新字典项")
     @PostMapping("updateItems")
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission("sys:dict:edit")
@@ -104,7 +98,6 @@ public class SysDictItemController {
      *
      * @param id -
      */
-    @Log("字典项删除")
     @DeleteMapping("/{id}")
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     @SaCheckPermission("sys:dict:del")

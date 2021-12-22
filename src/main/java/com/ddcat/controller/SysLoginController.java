@@ -2,7 +2,6 @@ package com.ddcat.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.ddcat.annotation.Log;
 import com.ddcat.entity.user.UserLoginDTO;
 import com.ddcat.service.SysUserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ public class SysLoginController {
     /**
      * 用户认证
      */
-    @Log("用户认证")
     @PostMapping("login")
     public SaTokenInfo login(@Valid @RequestBody UserLoginDTO dto) {
         return service.login(dto);

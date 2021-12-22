@@ -51,12 +51,12 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("客户端断开连接：{}", ctx.channel().id());
         //防止被顶下线用户websocket 没有及时断开 对比Channel是否和当前在线的是否一致
-        var key = AttributeKey.valueOf(NettyConstant.USER_ID);
+        /*var key = AttributeKey.valueOf(NettyConstant.USER_ID);
         var userId = ctx.channel().attr(key).get();
         var channel = NettyChannelPool.userChannelMap.get(userId);
         if (channel != null && ctx.channel().id().asShortText().equals(channel.id().asShortText())) {
             NettyChannelPool.userChannelMap.remove(userId);
-        }
+        }*/
         NettyChannelPool.channels.remove(ctx.channel());
         super.channelInactive(ctx);
     }
@@ -65,6 +65,8 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
         if (frame instanceof PingWebSocketFrame) {
             pingWebSocketFrameHandler(ctx, (PingWebSocketFrame) frame);
+        } else if (frame instanceof PongWebSocketFrame) {
+            pongWebSocketFrameHandler(ctx, (PongWebSocketFrame) frame);
         } else if (frame instanceof TextWebSocketFrame) {
             textWebSocketFrameHandler(ctx, (TextWebSocketFrame) frame);
         } else if (frame instanceof CloseWebSocketFrame) {
@@ -166,5 +168,15 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
      */
     private void pingWebSocketFrameHandler(ChannelHandlerContext ctx, PingWebSocketFrame frame) {
         ctx.channel().writeAndFlush(new PongWebSocketFrame(frame.content().retain()));
+    }
+
+    /**
+     * 处理客户端心跳包
+     *
+     * @param ctx   -
+     * @param frame -
+     */
+    private void pongWebSocketFrameHandler(ChannelHandlerContext ctx, PongWebSocketFrame frame) {
+        ctx.channel().writeAndFlush(new PingWebSocketFrame(frame.content().retain()));
     }
 }

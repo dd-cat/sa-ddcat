@@ -3,7 +3,6 @@ package com.ddcat.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ddcat.annotation.Log;
 import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
@@ -30,7 +29,6 @@ public class SysRoleController {
      *
      * @param id -
      */
-    @Log("角色根据ID查询单个")
     @GetMapping("{id}")
     @SaCheckLogin
     public SysRole getById(@PathVariable long id) {
@@ -42,7 +40,6 @@ public class SysRoleController {
      *
      * @param dto -
      */
-    @Log("角色保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:role:add", "sys:role:edit"})
     public void saveOrUpdate(@Valid @RequestBody RoleDTO dto) {
@@ -54,7 +51,6 @@ public class SysRoleController {
      *
      * @param dto -
      */
-    @Log("角色分页查询")
     @PostMapping("page")
     @SaCheckLogin
     public IPage<SysRole> page(@Valid @RequestBody RolePageDTO dto) {
@@ -66,7 +62,6 @@ public class SysRoleController {
      *
      * @param id -
      */
-    @Log("角色删除")
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:role:del")
     public void delete(@PathVariable long id) {

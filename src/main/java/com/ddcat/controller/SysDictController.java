@@ -6,7 +6,6 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ddcat.annotation.Log;
 import com.ddcat.entity.dict.DictDTO;
 import com.ddcat.entity.dict.DictPageDTO;
 import com.ddcat.entity.dict.SysDict;
@@ -33,7 +32,6 @@ public class SysDictController {
      *
      * @param id -
      */
-    @Log("字典根据ID查询单个")
     @GetMapping("{id}")
     @SaCheckLogin
     public SysDict getById(@PathVariable long id) {
@@ -46,7 +44,6 @@ public class SysDictController {
      * @param dto -
      * @return -
      */
-    @Log("字典分页查询")
     @PostMapping("page")
     @SaCheckLogin
     public IPage<SysDict> page(@Valid @RequestBody DictPageDTO dto) {
@@ -59,7 +56,6 @@ public class SysDictController {
      *
      * @param dto -
      */
-    @Log("字典保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
     public void saveOrUpdate(@Valid @RequestBody DictDTO dto) {
@@ -71,7 +67,6 @@ public class SysDictController {
      *
      * @param id -
      */
-    @Log("字典删除")
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:dict:del")
     public void delete(@PathVariable long id) {

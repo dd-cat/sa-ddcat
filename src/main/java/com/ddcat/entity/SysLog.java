@@ -22,9 +22,13 @@ public class SysLog implements Serializable {
      */
     private LocalDateTime createTime;
     /**
-     * 标题
+     * 路径
      */
-    private String title;
+    private String path;
+    /**
+     * ip
+     */
+    private String localhost;
     /**
      * 提交的数据
      */
@@ -41,5 +45,6 @@ public class SysLog implements Serializable {
      * 异常信息
      */
     private String exception;
+
 }
 

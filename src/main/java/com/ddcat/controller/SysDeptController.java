@@ -4,7 +4,6 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ddcat.annotation.Log;
 import com.ddcat.entity.dept.DeptDTO;
 import com.ddcat.entity.dept.DeptPageDTO;
 import com.ddcat.entity.dept.SysDept;
@@ -34,7 +33,6 @@ public class SysDeptController {
      *
      * @param id -
      */
-    @Log("部门根据ID查询单个")
     @GetMapping("{id}")
     @SaCheckLogin
     public SysDept getById(@PathVariable long id) {
@@ -46,7 +44,6 @@ public class SysDeptController {
      *
      * @return -
      */
-    @Log("组织获取树形数据")
     @GetMapping("tree")
     @SaCheckLogin
     public List<Tree<Long>> tree() {
@@ -60,7 +57,6 @@ public class SysDeptController {
      * @param dto -
      * @throws IOException -
      */
-    @Log("组织保存or修改")
     @PostMapping
     @SaCheckPermission({"sys:dept:add", "sys:dept:edit"})
     public void saveOrUpdate(@Valid @RequestBody DeptDTO dto) throws IOException {
@@ -72,7 +68,6 @@ public class SysDeptController {
      *
      * @param dto -
      */
-    @Log("组织分页查询")
     @PostMapping("page")
     @SaCheckLogin
     public IPage<SysDept> page(@RequestBody DeptPageDTO dto) {
@@ -84,7 +79,6 @@ public class SysDeptController {
      *
      * @param id -
      */
-    @Log("组织删除")
     @DeleteMapping("{id}")
     @SaCheckPermission("sys:dept:del")
     public void delete(@PathVariable long id) {
