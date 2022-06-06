@@ -15,7 +15,7 @@ public class SysLog implements Serializable {
     /**
      * 创建者
      */
-    private Long createUserId;
+    private Long createBy;
 
     /**
      * 创建时间

@@ -17,22 +17,22 @@ import java.time.LocalDateTime;
 @Component
 public class DefaultMetaObjectHandler implements MetaObjectHandler {
 
-    private static final String CREATE_USER_ID = "createUserId";
+    private static final String CREATE_BY = "createBy";
     private static final String CREATE_TIME = "createTime";
-    private static final String UPDATE_USER_ID = "updateUserId";
+    private static final String UPDATE_BY = "updateBy";
     private static final String UPDATE_TIME = "updateTime";
 
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("start insert fill ....");
         this.strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, CREATE_USER_ID, Long.class, StpUtil.getLoginIdAsLong());
+        this.strictInsertFill(metaObject, CREATE_BY, Long.class, StpUtil.getLoginIdAsLong());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
         this.strictUpdateFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, UPDATE_USER_ID, Long.class, StpUtil.getLoginIdAsLong());
+        this.strictInsertFill(metaObject, UPDATE_BY, Long.class, StpUtil.getLoginIdAsLong());
     }
 }

@@ -2,7 +2,7 @@ package com.ddcat.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -53,7 +53,10 @@ public class SysDictItemController {
     @SaCheckLogin
     public IPage<SysDictItem> page(@Valid @RequestBody DictItemPageDTO dto) {
         return service.page(new Page<>(dto.getCurrent(), dto.getSize()), Wrappers.<SysDictItem>lambdaQuery()
-                .like(CharSequenceUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName()));
+                .like(StrUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName())
+                .eq(dto.getStatus() != null, SysDictItem::getStatus, dto.getStatus())
+                .like(StrUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName())
+        );
     }
 
     /**

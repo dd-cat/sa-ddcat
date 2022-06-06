@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -32,7 +31,7 @@ public class SysUserController {
      */
     @GetMapping("info")
     @SaCheckLogin
-    public UserLoginVO info(HttpServletRequest request) {
+    public UserLoginVO info() {
         return service.info();
     }
 
@@ -91,7 +90,7 @@ public class SysUserController {
         for (var vo : list) {
             var entity = new SysUser();
             BeanUtil.copyProperties(vo, entity);
-            entity.setSex(Byte.valueOf(vo.getSex()));
+            entity.setSex("0".equals(vo.getSex()));
             service.save(entity);
         }
     }

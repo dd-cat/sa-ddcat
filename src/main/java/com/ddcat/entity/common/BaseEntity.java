@@ -23,7 +23,7 @@ public class BaseEntity implements Serializable {
      * 创建者
      */
     @TableField(fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
-    private Long createUserId;
+    private Long createBy;
     /**
      * 创建时间
      */
@@ -33,7 +33,7 @@ public class BaseEntity implements Serializable {
      * 更新者
      */
     @TableField(fill = FieldFill.UPDATE, insertStrategy = FieldStrategy.NEVER)
-    private Long updateUserId;
+    private Long updateBy;
     /**
      * 更新者
      */

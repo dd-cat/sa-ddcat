@@ -21,7 +21,7 @@ public class SysUser extends BaseEntity {
     /**
      * 性别 0:男 1:女
      */
-    private Byte sex;
+    private Boolean sex;
     /**
      * 手机号
      */

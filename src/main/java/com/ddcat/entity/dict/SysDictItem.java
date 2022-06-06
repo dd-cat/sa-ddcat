@@ -25,5 +25,9 @@ public class SysDictItem extends BaseEntity {
     /**
      * 排序
      */
-    private String sort;
+    private Integer sort;
+    /**
+     * 状态 （字典sys_normal_disable）
+     */
+    private Boolean status;
 }
