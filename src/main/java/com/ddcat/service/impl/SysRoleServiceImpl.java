@@ -41,7 +41,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @CacheEvict(value = RedisKeyConstant.ROLE_MENU, key = "#r.id", condition = "#r.menuIds.length > 0")
     public void saveOrUpdate(RoleDTO r) {
         var queryWrapper = Wrappers.<SysRole>lambdaQuery()
-                .eq(SysRole::getCode, r.getCode());
+                .eq(SysRole::getCode, r.getCode())
+                //排除系统管理员不允许修改 前端做置灰操作，所以这里就返回报错了
+                .ne(SysRole::getCode, "admin");
         if (r.getId() != null) {
             queryWrapper.ne(SysRole::getId, r.getId());
         }
@@ -65,6 +67,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     @CacheEvict(value = RedisKeyConstant.ROLE_MENU, key = "#id")
     public void removeById(long id) {
+        SysRole role = baseMapper.selectById(id);
+        if (role == null) {
+            throw new BusinessException(ResultEnum.B000014);
+        }
+        if (role.getCode().equals("admin")) {
+            throw new BusinessException(ResultEnum.B000015);
+        }
         // 查询是否有用户关联角色
         var count = baseMapper.getUserCount(id);
         if (count > 0) {
@@ -75,6 +84,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 清除当前角色拥有权限
             baseMapper.deleteMenuById(id);
         }
+
     }
 
     @Override

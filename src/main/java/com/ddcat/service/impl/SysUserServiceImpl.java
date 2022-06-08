@@ -73,8 +73,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             entity.setPassword(password);
         }
         super.saveOrUpdate(entity);
+        // 加载用户角色
+        setUserRole(dto.getRoleIds(), entity.getId());
         //重新缓存用户信息
         StpUtil.getTokenSession().set(RedisKeyConstant.USER, entity);
+    }
+
+    /**
+     * 重新加载用户角色信息
+     *
+     * @param id -
+     */
+    private void setUserRole(long[] roleIds, Long id) {
+        if (roleIds.length > 0) {
+            baseMapper.deleteUserRoleById(id);
+            baseMapper.batchUserRole(id, roleIds);
+        }
     }
 
     @Override
@@ -167,7 +181,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         var i = baseMapper.deleteById(id);
         // 删除用户角色关联
         if (i > 0) {
-            baseMapper.deleteUserById(id);
+            baseMapper.deleteUserRoleById(id);
         }
+    }
+
+    @Override
+    public UserVo selectId(long id) {
+        UserVo vo = new UserVo();
+        SysUser user = baseMapper.selectById(id);
+        BeanUtil.copyProperties(user, vo);
+        Long[] roleIds = baseMapper.selectRoleIdsByUserId(id);
+        vo.setRoleIds(roleIds);
+        return vo;
     }
 }

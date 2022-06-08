@@ -3,6 +3,7 @@ package com.ddcat.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ddcat.entity.role.RoleDTO;
 import com.ddcat.entity.role.RolePageDTO;
 import com.ddcat.entity.role.SysRole;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 角色
@@ -23,6 +25,21 @@ import javax.validation.Valid;
 public class SysRoleController {
 
     private final SysRoleService service;
+
+    /**
+     * 列表
+     *
+     * @return -
+     */
+    @GetMapping("list")
+    @SaCheckLogin
+    public List<SysRole> list() {
+        return service.list(Wrappers.<SysRole>lambdaQuery()
+                .select(SysRole::getName, SysRole::getId)
+                // 排除系统管理员
+                .ne(SysRole::getCode, "admin")
+        );
+    }
 
     /**
      * 根据ID查询单个

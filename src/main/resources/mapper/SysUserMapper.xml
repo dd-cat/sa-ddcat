@@ -9,7 +9,7 @@
         a.name,
         b.name dept_name,
         a.mobile,
-        a.create_time
+        a.sex
         FROM sys_user a
         inner JOIN sys_dept b ON a.dept_id = b.id and b.flag = 0
         WHERE a.flag = 0

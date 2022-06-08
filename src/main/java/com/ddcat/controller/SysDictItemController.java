@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.dict.DictItemDTO;
 import com.ddcat.entity.dict.DictItemPageDTO;
-import com.ddcat.entity.dict.DictItemUpdateDTO;
 import com.ddcat.entity.dict.SysDictItem;
 import com.ddcat.service.SysDictItemService;
 import lombok.RequiredArgsConstructor;
@@ -53,9 +52,10 @@ public class SysDictItemController {
     @SaCheckLogin
     public IPage<SysDictItem> page(@Valid @RequestBody DictItemPageDTO dto) {
         return service.page(new Page<>(dto.getCurrent(), dto.getSize()), Wrappers.<SysDictItem>lambdaQuery()
+                .select(SysDictItem::getId, SysDictItem::getName, SysDictItem::getValue, SysDictItem::getType, SysDictItem::getRemark, SysDictItem::getSort, SysDictItem::getStatus)
+                .like(StrUtil.isNotBlank(dto.getType()), SysDictItem::getType, dto.getType())
                 .like(StrUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName())
                 .eq(dto.getStatus() != null, SysDictItem::getStatus, dto.getStatus())
-                .like(StrUtil.isNotBlank(dto.getName()), SysDictItem::getName, dto.getName())
         );
     }
 
@@ -69,7 +69,9 @@ public class SysDictItemController {
     @Cacheable(value = RedisKeyConstant.DICT, key = "#type")
     @SaCheckLogin
     public List<SysDictItem> select(@PathVariable String type) {
-        return service.list(Wrappers.<SysDictItem>lambdaQuery().eq(SysDictItem::getType, type).orderByAsc(SysDictItem::getSort));
+        return service.list(Wrappers.<SysDictItem>lambdaQuery()
+                .select(SysDictItem::getName, SysDictItem::getValue)
+                .eq(SysDictItem::getType, type).orderByAsc(SysDictItem::getSort));
     }
 
     /**
@@ -82,18 +84,6 @@ public class SysDictItemController {
     @SaCheckPermission({"sys:dict:add", "sys:dict:edit"})
     public void saveOrUpdate(@Valid @RequestBody DictItemDTO dto) {
         service.saveOrUpdate(dto);
-    }
-
-    /**
-     * 批量更新字典项
-     *
-     * @param dto -
-     */
-    @PostMapping("updateItems")
-    @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
-    @SaCheckPermission("sys:dict:edit")
-    public void updateItems(@Valid @RequestBody DictItemUpdateDTO dto) {
-        service.updateBatchById(dto.getDictItemList());
     }
 
     /**

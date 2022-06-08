@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public List<Tree<Long>> tree(Set<SysDept> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
         for (var dept : all) {
-            var treeNode = new TreeNode<>(dept.getId(), dept.getParentId(), dept.getName(), dept.getSort());
+            var treeNode = new TreeNode<>(dept.getId(), dept.getParentId(), null, dept.getSort());
+            var extra = new HashMap<String, Object>();
+            extra.put("label", dept.getName());
+            extra.put("code", dept.getCode());
+            treeNode.setExtra(extra);
             nodeList.add(treeNode);
         }
         return TreeUtil.build(nodeList, -1L);

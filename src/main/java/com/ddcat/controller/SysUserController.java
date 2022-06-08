@@ -49,8 +49,8 @@ public class SysUserController {
      */
     @GetMapping("{id}")
     @SaCheckLogin
-    public SysUser getById(@PathVariable long id) {
-        return service.getById(id);
+    public UserVo getById(@PathVariable long id) {
+        return service.selectId(id);
     }
 
     /**

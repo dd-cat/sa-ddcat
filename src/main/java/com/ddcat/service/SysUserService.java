@@ -61,4 +61,12 @@ public interface SysUserService extends IService<SysUser> {
      * @param id -
      */
     void removeById(long id);
+
+    /**
+     * 用户信息
+     *
+     * @param id -
+     * @return -
+     */
+    UserVo selectId(long id);
 }

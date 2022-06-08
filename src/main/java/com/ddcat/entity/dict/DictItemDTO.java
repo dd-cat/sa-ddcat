@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author dd-cat
@@ -30,4 +31,21 @@ public class DictItemDTO {
     @Length(max = 10, message = "值长度为[1-10]")
     @NotBlank(message = "值必填")
     private String value;
+
+    /**
+     * 状态
+     */
+    @NotNull(message = "状态必填")
+    private Boolean status;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
+
+    /**
+     * 备注
+     */
+    @Length(max = 255, message = "备注长度为[0-10]")
+    private String remark;
 }

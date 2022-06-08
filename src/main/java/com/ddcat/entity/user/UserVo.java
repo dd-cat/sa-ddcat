@@ -3,36 +3,39 @@ package com.ddcat.entity.user;
 import lombok.Data;
 
 /**
+ * 用户信息
+ *
  * @author dd-cat
  */
 @Data
-public class UserPageVO {
-    /**
-     * 序号
-     */
+public class UserVo {
     private Long id;
-    /**
-     * 头像
-     */
-    private String avatar;
     /**
      * 账户
      */
     private String account;
     /**
-     * 姓名
+     * 用户名
      */
     private String name;
     /**
-     * 所属机构
+     * 性别 0:男 1:女
      */
-    private String deptName;
+    private Boolean sex;
     /**
      * 手机号
      */
     private String mobile;
     /**
-     * 性别 false男 true女
+     * 所属机构
      */
-    private Boolean sex;
+    private Long deptId;
+    /**
+     * 个人简介
+     */
+    private String remark;
+    /**
+     * 角色
+     */
+    private Long[] roleIds;
 }

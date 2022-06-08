@@ -28,9 +28,9 @@ public class UserDTO {
      */
     private String avatar;
     /**
-     * 性别 0:男 1:女
+     * 性别 false:男 true:女
      */
-    private Byte sex;
+    private Boolean sex;
     /**
      * 身份证
      */
@@ -52,5 +52,5 @@ public class UserDTO {
     /**
      * 角色
      */
-    private String[] roles;
+    private long[] roleIds;
 }

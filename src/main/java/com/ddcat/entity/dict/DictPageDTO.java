@@ -13,4 +13,8 @@ public class DictPageDTO extends Search {
      * 名称
      */
     private String name;
+    /**
+     * 类型
+     */
+    private String type;
 }

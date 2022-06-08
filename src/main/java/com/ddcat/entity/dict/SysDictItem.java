@@ -30,4 +30,8 @@ public class SysDictItem extends BaseEntity {
      * 状态 （字典sys_normal_disable）
      */
     private Boolean status;
+    /**
+     * 备注
+     */
+    private String remark;
 }
