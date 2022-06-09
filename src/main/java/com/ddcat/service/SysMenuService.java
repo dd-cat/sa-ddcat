@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ddcat.entity.menu.SysMenu;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,7 +25,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param id -
      * @return -
      */
-    List<Long> getByRoleId(long id);
+    Map<String, Object> getByRoleId(long id);
 
     /**
      * 通过角色编号查询URL 权限

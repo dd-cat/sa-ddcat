@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单
@@ -70,7 +71,7 @@ public class SysMenuController {
      */
     @GetMapping("getByRoleId/{id}")
     @SaCheckLogin
-    public List<Long> getByRoleId(@PathVariable long id) {
+    public Map<String, Object> getByRoleId(@PathVariable long id) {
         return service.getByRoleId(id);
     }
 

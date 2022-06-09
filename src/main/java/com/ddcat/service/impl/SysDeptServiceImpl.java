@@ -54,7 +54,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 
     @Override
     public IPage<SysDept> page(DeptPageDTO dto) {
-        return super.page(new Page<>(dto.getCurrent(), dto.getSize()));
+        return baseMapper.selectPage(new Page<>(dto.getCurrent(), dto.getSize()), Wrappers.emptyWrapper());
     }
 
     @Override

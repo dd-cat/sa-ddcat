@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
 import com.ddcat.entity.common.BaseEntity;
@@ -54,8 +55,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<Long> getByRoleId(long id) {
-        return baseMapper.getByRoleId(id);
+    public Map<String, Object> getByRoleId(long id) {
+        Map<String, Object> map = new HashMap<>();
+        List<SysMenu> all = baseMapper.selectList(Wrappers.emptyWrapper());
+        List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
+        for (var menu : all) {
+            var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
+            nodeList.add(treeNode);
+        }
+        map.put("menus", TreeUtil.build(nodeList, -1L));
+        map.put("checkedKeys", baseMapper.getByRoleId(id));
+        return map;
     }
 
     @Override

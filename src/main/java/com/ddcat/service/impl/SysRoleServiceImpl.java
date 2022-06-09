@@ -30,10 +30,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         var page = new Page<SysRole>(dto.getCurrent(), dto.getSize());
         // 构建查询条件
         var queryWrapper = Wrappers.<SysRole>lambdaQuery()
+                .select(SysRole::getId, SysRole::getCode, SysRole::getName, SysRole::getRemark)
                 .like(CharSequenceUtil.isNotBlank(dto.getName()), SysRole::getName, dto.getName())
                 .like(CharSequenceUtil.isNotBlank(dto.getCode()), SysRole::getCode, dto.getCode())
                 .like(CharSequenceUtil.isNotBlank(dto.getRemark()), SysRole::getRemark, dto.getRemark());
-        return super.page(page, queryWrapper);
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
     @Override
