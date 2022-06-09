@@ -86,7 +86,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     private void setUserRole(long[] roleIds, Long id) {
         if (roleIds.length > 0) {
-            baseMapper.deleteUserRoleById(id);
+            baseMapper.deleteRoleByUserId(id);
             baseMapper.batchUserRole(id, roleIds);
         }
     }
@@ -181,7 +181,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         var i = baseMapper.deleteById(id);
         // 删除用户角色关联
         if (i > 0) {
-            baseMapper.deleteUserRoleById(id);
+            baseMapper.deleteRoleByUserId(id);
         }
     }
 

@@ -52,16 +52,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000006);
         }
-
         var entity = new SysRole();
         BeanUtil.copyProperties(r, entity);
         super.saveOrUpdate(entity);
         var menuIds = r.getMenuIds();
         if (menuIds.length > 0) {
             // 清除当前角色拥有权限
-            baseMapper.deleteMenuById(entity.getId());
+            baseMapper.deleteMenuByRoleId(entity.getId());
             // 新增当前角色拥有权限
-            baseMapper.insertMenu(entity.getId(), menuIds);
+            baseMapper.batchRoleMenu(entity.getId(), menuIds);
         }
     }
 
@@ -83,7 +82,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         var delCount = baseMapper.deleteById(id);
         if (delCount > 0) {
             // 清除当前角色拥有权限
-            baseMapper.deleteMenuById(id);
+            baseMapper.deleteMenuByRoleId(id);
         }
 
     }

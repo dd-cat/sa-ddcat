@@ -61,6 +61,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
         for (var menu : all) {
             var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
+            var extra = new HashMap<String, Object>();
+            extra.put("label", menu.getName());
+            treeNode.setExtra(extra);
             nodeList.add(treeNode);
         }
         map.put("menus", TreeUtil.build(nodeList, -1L));

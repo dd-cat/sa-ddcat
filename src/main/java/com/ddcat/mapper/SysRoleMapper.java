@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ddcat.entity.role.SysRole;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * @param roleId -
      * @return -
      */
-    @Delete("delete from role_menu where role_id = ${roleId}")
-    long deleteMenuById(long roleId);
+    @Delete("delete from sys_role_menu where role_id = ${roleId}")
+    long deleteMenuByRoleId(long roleId);
 
     /**
      * 新增当前用户拥有权限
@@ -30,12 +29,12 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * @return -
      */
     @Insert("<script>" +
-            "insert into role_menu(role_id, menu_id) value" +
+            "insert into sys_role_menu(role_id, menu_id) values" +
             "<foreach collection='menuIds' item='menuId' separator=','>" +
             "(${roleId},${menuId})" +
             "</foreach>" +
             "</script>")
-    long insertMenu(@Param("roleId") long roleId, @Param("menuIds") long[] menuIds);
+    long batchRoleMenu(long roleId, long[] menuIds);
 
     /**
      * 通过用户ID，查询角色信息

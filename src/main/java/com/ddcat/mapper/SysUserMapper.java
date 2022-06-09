@@ -43,9 +43,9 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param userId -
      */
     @Insert({"<script>" +
-            "insert into sys_user_role(user_id, role_id) values " +
-            "<foreach collection=\"roleIds\" item=\"item\" index=\"index\" separator=\",\">" +
-            " (${userId},${item})\n" +
+            "insert into sys_user_role(user_id, role_id) values" +
+            "<foreach collection='roleIds' item='roleId' separator=','>" +
+            "(${userId},${roleId})" +
             "</foreach>" +
             "</script>"})
     void batchUserRole(long userId, long[] roleIds);
@@ -56,7 +56,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param userId -
      */
     @Delete("delete from sys_user_role where user_id = ${userId}")
-    void deleteUserRoleById(long userId);
+    void deleteRoleByUserId(long userId);
 
     /**
      * 查询当前用户拥有的角色 ID
