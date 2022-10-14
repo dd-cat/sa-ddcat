@@ -21,7 +21,7 @@ public final class Constants {
     /**
      * 开源地址
      */
-    public static final String GITHUB_URL = "https://gitee.com/dd-cat/sa-ddcat";
+    public static final String GITHUB_URL = "https://github.com/dd-cat/sa-ddcat.git";
 
     /**
      * 开发文档地址

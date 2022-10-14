@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 用户
@@ -86,9 +87,9 @@ public class SysUserController {
     @PostMapping("import")
     @SaCheckPermission("sys:user:import")
     public void importData(MultipartFile file) throws IOException {
-        var list = ExcelUtils.importExcel(file, 0, 1, UserImportVO.class);
-        for (var vo : list) {
-            var entity = new SysUser();
+        List<UserImportVO> list = ExcelUtils.importExcel(file, 0, 1, UserImportVO.class);
+        for (UserImportVO vo : list) {
+            SysUser entity = new SysUser();
             BeanUtil.copyProperties(vo, entity);
             entity.setSex("0".equals(vo.getSex()));
             service.save(entity);

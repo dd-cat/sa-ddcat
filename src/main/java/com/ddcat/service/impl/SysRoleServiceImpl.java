@@ -2,6 +2,7 @@ package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,9 +28,9 @@ import java.util.List;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Override
     public IPage<SysRole> page(RolePageDTO dto) {
-        var page = new Page<SysRole>(dto.getCurrent(), dto.getSize());
+        Page<SysRole> page = new Page<>(dto.getCurrent(), dto.getSize());
         // 构建查询条件
-        var queryWrapper = Wrappers.<SysRole>lambdaQuery()
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.<SysRole>lambdaQuery()
                 .select(SysRole::getId, SysRole::getCode, SysRole::getName, SysRole::getRemark)
                 .like(CharSequenceUtil.isNotBlank(dto.getName()), SysRole::getName, dto.getName())
                 .like(CharSequenceUtil.isNotBlank(dto.getCode()), SysRole::getCode, dto.getCode())
@@ -41,21 +42,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisKeyConstant.ROLE_MENU, key = "#r.id", condition = "#r.menuIds.length > 0")
     public void saveOrUpdate(RoleDTO r) {
-        var queryWrapper = Wrappers.<SysRole>lambdaQuery()
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getCode, r.getCode())
                 //排除系统管理员不允许修改 前端做置灰操作，所以这里就返回报错了
                 .ne(SysRole::getCode, "admin");
         if (r.getId() != null) {
             queryWrapper.ne(SysRole::getId, r.getId());
         }
-        var count = baseMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000006);
         }
-        var entity = new SysRole();
+        SysRole entity = new SysRole();
         BeanUtil.copyProperties(r, entity);
         super.saveOrUpdate(entity);
-        var menuIds = r.getMenuIds();
+        long[] menuIds = r.getMenuIds();
         if (menuIds.length > 0) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuByRoleId(entity.getId());
@@ -75,11 +76,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new BusinessException(ResultEnum.B000015);
         }
         // 查询是否有用户关联角色
-        var count = baseMapper.getUserCount(id);
+        int count = baseMapper.getUserCount(id);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000012);
         }
-        var delCount = baseMapper.deleteById(id);
+        int delCount = baseMapper.deleteById(id);
         if (delCount > 0) {
             // 清除当前角色拥有权限
             baseMapper.deleteMenuByRoleId(id);

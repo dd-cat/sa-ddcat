@@ -33,9 +33,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<Tree<Long>> tree(Set<SysMenu> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
-        for (var menu : all) {
-            var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
-            var extra = new HashMap<String, Object>();
+        for (SysMenu menu : all) {
+            TreeNode<Long> treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
+            Map<String, Object> extra = new HashMap<>();
             extra.put("path", menu.getPath());
             extra.put("icon", menu.getIcon());
             extra.put("component", menu.getComponent());
@@ -59,9 +59,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         Map<String, Object> map = new HashMap<>();
         List<SysMenu> all = baseMapper.selectList(Wrappers.emptyWrapper());
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
-        for (var menu : all) {
-            var treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
-            var extra = new HashMap<String, Object>();
+        for (SysMenu menu : all) {
+            TreeNode<Long> treeNode = new TreeNode<>(menu.getId(), menu.getParentId(), menu.getName(), menu.getSort());
+            Map<String, Object> extra = new HashMap<>();
             extra.put("label", menu.getName());
             treeNode.setExtra(extra);
             nodeList.add(treeNode);
@@ -79,16 +79,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<Long>> getUserMenus() {
-        var all = new ArrayList<SysMenu>();
-        var roleIds = roleService.findRolesByUserId(StpUtil.getLoginIdAsLong()).stream().map(SysRole::getId)
+        List<SysMenu> all = new ArrayList<>();
+        List<Long> roleIds = roleService.findRolesByUserId(StpUtil.getLoginIdAsLong()).stream().map(SysRole::getId)
                 .collect(Collectors.toList());
         roleIds.forEach(roleId -> {
-            var collect = findMenuByRoleId(roleId).stream()
+            List<SysMenu> collect = findMenuByRoleId(roleId).stream()
                     .filter(permission -> 2 != permission.getType())
                     .collect(Collectors.toList());
             all.addAll(collect);
         });
-        var personSet = new TreeSet<SysMenu>(Comparator.comparing(BaseEntity::getId));
+        Set<SysMenu> personSet = new TreeSet<>(Comparator.comparing(BaseEntity::getId));
         personSet.addAll(all);
         return tree(personSet);
     }

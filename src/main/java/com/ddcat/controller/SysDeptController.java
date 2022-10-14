@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 部门
@@ -47,7 +48,7 @@ public class SysDeptController {
     @GetMapping("tree")
     @SaCheckLogin
     public List<Tree<Long>> tree() {
-        var all = new HashSet<>(service.list());
+        Set<SysDept> all = new HashSet<>(service.list());
         return service.tree(all);
     }
 

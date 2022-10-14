@@ -2,6 +2,8 @@ package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.constant.RedisKeyConstant;
@@ -28,23 +30,23 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 
     @Override
     public void saveOrUpdate(DictDTO dto) {
-        var queryWrapper = Wrappers.<SysDict>lambdaQuery()
+        LambdaQueryWrapper<SysDict> queryWrapper = Wrappers.<SysDict>lambdaQuery()
                 .eq(SysDict::getType, dto.getType());
         if (dto.getId() != null) {
             queryWrapper.ne(SysDict::getId, dto.getId());
         }
-        var count = baseMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000007);
         }
 
-        var entity = new SysDict();
+        SysDict entity = new SysDict();
         BeanUtil.copyProperties(dto, entity);
         //先修改子集
         if (dto.getId() != null && CharSequenceUtil.isNotBlank(dto.getType())) {
-            var dict = baseMapper.selectById(dto.getId());
+            SysDict dict = baseMapper.selectById(dto.getId());
             if (!dict.getType().equals(dto.getType())) {
-                var updateWrapper = Wrappers.<SysDictItem>lambdaUpdate()
+                LambdaUpdateWrapper<SysDictItem> updateWrapper = Wrappers.<SysDictItem>lambdaUpdate()
                         .set(SysDictItem::getType, dto.getType())
                         .eq(SysDictItem::getType, dict.getType());
                 dictItemMapper.update(null, updateWrapper);
@@ -56,7 +58,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     @CacheEvict(value = RedisKeyConstant.DICT, allEntries = true)
     public void removeById(long id) {
-        var dict = baseMapper.selectById(id);
+        SysDict dict = baseMapper.selectById(id);
         if (dict != null) {
             // 删除字典并删除字典项
             baseMapper.deleteById(id);

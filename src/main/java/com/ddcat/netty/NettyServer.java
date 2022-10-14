@@ -33,7 +33,7 @@ public class NettyServer implements InitializingBean, DisposableBean {
             // 创建从线程组，处理主线程组分配下来的io操作
             workGroup = new NioEventLoopGroup();
 
-            var serverBootstrap = new ServerBootstrap();
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024)
                     .group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)

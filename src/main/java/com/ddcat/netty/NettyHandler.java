@@ -3,6 +3,7 @@ package com.ddcat.netty;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.ddcat.constant.NettyConstant;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -90,10 +91,10 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
      * @return -
      */
     private static Map<String, String> getUrlParams(String uri) {
-        var params = new HashMap<String, String>(10);
-        var idx = uri.indexOf("?");
+        Map<String, String> params = new HashMap<>(10);
+        int idx = uri.indexOf("?");
         if (idx != -1) {
-            var paramsArr = uri.substring(idx + 1).split("&");
+            String[] paramsArr = uri.substring(idx + 1).split("&");
 
             for (String param : paramsArr) {
                 idx = param.indexOf("=");
@@ -110,21 +111,21 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
      * @param request -
      */
     private void fullHttpRequestHandler(ChannelHandlerContext ctx, FullHttpRequest request) {
-        var uri = request.uri();
+        String uri = request.uri();
         log.info("接收到客户端的握手包：{}", ctx.channel().id());
-        var params = getUrlParams(uri);
+        Map<String, String> params = getUrlParams(uri);
         log.info("客户端请求参数：{}", params);
-        var token = params.get("token");
+        String token = params.get("token");
 
-        var loginId = (String) StpUtil.getLoginIdByToken(token);
+        String loginId = (String) StpUtil.getLoginIdByToken(token);
         if (CharSequenceUtil.isNotBlank(loginId) && Long.parseLong(loginId) > 0) {
             //如果之前有连接 先关闭 只保留一个在线用户
-            var channel = NettyChannelPool.userChannelMap.get(loginId);
+            Channel channel = NettyChannelPool.userChannelMap.get(loginId);
             if (channel != null) {
                 channel.writeAndFlush(new CloseWebSocketFrame());
             }
             // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
-            var key = AttributeKey.valueOf(NettyConstant.USER_ID);
+            AttributeKey<Object> key = AttributeKey.valueOf(NettyConstant.USER_ID);
             ctx.channel().attr(key).setIfAbsent(loginId);
 
             NettyChannelPool.userChannelMap.put(loginId, ctx.channel());
@@ -154,7 +155,7 @@ public class NettyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
      * @param frame -
      */
     private void textWebSocketFrameHandler(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
-        var text = frame.text();
+        String text = frame.text();
         log.info("接收到客户端的消息：{}", text);
         // 将客户端消息回送给客户端
         ctx.channel().writeAndFlush(new TextWebSocketFrame("你发送的内容是：" + text));

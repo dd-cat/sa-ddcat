@@ -5,11 +5,15 @@ import com.ddcat.entity.common.Result;
 import com.ddcat.enums.ResultEnum;
 import com.ddcat.exception.BusinessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 /**
  * 全局异常处理器
@@ -55,12 +59,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<String> handleException(MethodArgumentNotValidException exception) {
-        var result = exception.getBindingResult();
-        var message = "";
+        BindingResult result = exception.getBindingResult();
+        String message = "";
         if (result.hasErrors()) {
-            var errors = result.getAllErrors();
+            List<ObjectError> errors = result.getAllErrors();
             if (!errors.isEmpty()) {
-                var fieldError = (FieldError) errors.get(0);
+                FieldError fieldError = (FieldError) errors.get(0);
                 message = fieldError.getDefaultMessage();
             }
         }

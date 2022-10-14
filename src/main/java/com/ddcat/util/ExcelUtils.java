@@ -70,7 +70,7 @@ public class ExcelUtils {
         if (inputStream == null) {
             return new ArrayList<>();
         }
-        var params = new ImportParams();
+        ImportParams params = new ImportParams();
         params.setTitleRows(titleRows);
         params.setHeadRows(headerRows);
         params.setNeedVerify(needVerify);

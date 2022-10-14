@@ -8,6 +8,7 @@ import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,13 +25,12 @@ import com.ddcat.netty.NettyChannelPool;
 import com.ddcat.service.SysMenuService;
 import com.ddcat.service.SysRoleService;
 import com.ddcat.service.SysUserService;
+import io.netty.channel.Channel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,12 +50,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void saveOrUpdate(UserDTO dto) {
         // 验证账号是否已经存在
-        var queryWrapper = Wrappers.<SysUser>lambdaQuery()
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
                 .eq(SysUser::getAccount, dto.getAccount());
         if (dto.getId() != null) {
             queryWrapper.ne(SysUser::getId, dto.getId());
         }
-        var count = baseMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000003);
         }
@@ -66,7 +66,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 throw new BusinessException(ResultEnum.B000004);
             }
         }
-        var entity = new SysUser();
+        SysUser entity = new SysUser();
         BeanUtil.copyProperties(dto, entity);
         if (entity.getId() == null) {
             // 初始化密码
@@ -94,7 +94,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public IPage<UserPageVO> page(UserPageDTO dto) {
         List<Long> ids = new ArrayList<>();
-        var deptId = dto.getDeptId();
+        Long deptId = dto.getDeptId();
         if (deptId != null) {
             ids = deptMapper.selectTreeId(deptId);
             ids.add(dto.getDeptId());
@@ -104,20 +104,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SaTokenInfo login(UserLoginDTO dto) {
-        var query = Wrappers.<SysUser>lambdaQuery();
-        var number = NumberUtil.isNumber(dto.getKey());
+        LambdaQueryWrapper<SysUser> query = Wrappers.<SysUser>lambdaQuery();
+        boolean number = NumberUtil.isNumber(dto.getKey());
         if (number) {
             query.eq(CharSequenceUtil.isNotBlank(dto.getKey()), SysUser::getMobile, dto.getKey());
         } else {
             query.eq(CharSequenceUtil.isNotBlank(dto.getKey()), SysUser::getAccount, dto.getKey());
         }
-        var entity = baseMapper.selectOne(query);
+        SysUser entity = baseMapper.selectOne(query);
         // 用户不存在
         if (entity == null) {
             throw new BusinessException(ResultEnum.S000001);
         }
         if (!number) {
-            var md5Str = SecureUtil.md5(dto.getPassword());
+            String md5Str = SecureUtil.md5(dto.getPassword());
             if (!entity.getPassword().equals(md5Str)) {
                 throw new BusinessException(ResultEnum.S000002);
             }
@@ -131,8 +131,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public IPage<UserOnlineListVO> online(UserOnlineListDTO dto) {
-        var dataMap = NettyChannelPool.userChannelMap;
-        var ids = dataMap.keySet();
+        Map<String, Channel> dataMap = NettyChannelPool.userChannelMap;
+        Set<String> ids = dataMap.keySet();
         if (ids.isEmpty()) {
             ids = new HashSet<>();
             ids.add("0");
@@ -142,16 +142,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public UserLoginVO info() {
-        var entity = this.getById(StpUtil.getLoginIdAsLong());
-        var permissions = new HashSet<String>();
+        SysUser entity = baseMapper.selectById(StpUtil.getLoginIdAsLong());
+        Set<String> permissions = new HashSet<>();
         //通过用户角色ID 获取用户权限列表
-        var roles = roleService.findRolesByUserId(entity.getId());
+        List<SysRole> roles = roleService.findRolesByUserId(entity.getId());
 
-        var roleCodes = roles.stream().map(SysRole::getCode).collect(Collectors.toList());
+        List<String> roleCodes = roles.stream().map(SysRole::getCode).collect(Collectors.toList());
 
-        var roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+        List<Long> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
         roleIds.forEach(roleId -> {
-            var permissionList = menuService.findMenuByRoleId(roleId).stream()
+            List<String> permissionList = menuService.findMenuByRoleId(roleId).stream()
                     .map(SysMenu::getPermission).filter(StrUtil::isNotEmpty)
                     .collect(Collectors.toList());
             permissions.addAll(permissionList);
@@ -161,7 +161,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void updatePassword(UserPasswordDTO dto) {
-        var user = baseMapper.selectById(StpUtil.getLoginIdAsLong());
+        SysUser user = baseMapper.selectById(StpUtil.getLoginIdAsLong());
         // 判断旧密码 和 原密码是否一致
         if (!user.getPassword().equals(SecureUtil.md5(dto.getOldPassword()))) {
             throw new BusinessException(ResultEnum.B000005);
@@ -174,11 +174,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void removeById(long id) {
-        var loginId = StpUtil.getLoginIdAsLong();
+        long loginId = StpUtil.getLoginIdAsLong();
         if (id == loginId) {
             throw new BusinessException(ResultEnum.B000002);
         }
-        var i = baseMapper.deleteById(id);
+        int i = baseMapper.deleteById(id);
         // 删除用户角色关联
         if (i > 0) {
             baseMapper.deleteRoleByUserId(id);

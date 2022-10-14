@@ -1,6 +1,7 @@
 package com.ddcat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ddcat.entity.dict.DictItemDTO;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
     @Override
     public void saveOrUpdate(DictItemDTO dto) {
-        var queryWrapper = Wrappers.<SysDictItem>lambdaQuery()
+        LambdaQueryWrapper<SysDictItem> queryWrapper = Wrappers.<SysDictItem>lambdaQuery()
                 .eq(SysDictItem::getType, dto.getType())
                 .and(i ->
                         i.eq(SysDictItem::getName, dto.getName())
@@ -27,11 +28,11 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
         if (dto.getId() != null) {
             queryWrapper.ne(SysDictItem::getId, dto.getId());
         }
-        var count = baseMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000008);
         }
-        var entity = new SysDictItem();
+        SysDictItem entity = new SysDictItem();
         BeanUtil.copyProperties(dto, entity);
         super.saveOrUpdate(entity);
     }

@@ -7,6 +7,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,9 +43,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public List<Tree<Long>> tree(Set<SysDept> all) {
         List<TreeNode<Long>> nodeList = CollUtil.newArrayList();
-        for (var dept : all) {
-            var treeNode = new TreeNode<>(dept.getId(), dept.getParentId(), null, dept.getSort());
-            var extra = new HashMap<String, Object>();
+        for (SysDept dept : all) {
+            TreeNode<Long> treeNode = new TreeNode<>(dept.getId(), dept.getParentId(), null, dept.getSort());
+            Map<String, Object> extra = new HashMap<>();
             extra.put("label", dept.getName());
             extra.put("code", dept.getCode());
             treeNode.setExtra(extra);
@@ -60,16 +62,16 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public void saveOrUpdate(DeptDTO dto) throws IOException {
         // 机构code是否已存在
-        var queryWrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getCode, dto.getCode());
+        LambdaQueryWrapper<SysDept> queryWrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getCode, dto.getCode());
         if (dto.getId() != null) {
             queryWrapper.ne(SysDept::getId, dto.getId());
         }
-        var count = baseMapper.selectCount(queryWrapper);
+        Integer count = baseMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000008);
         }
 
-        var entity = new SysDept();
+        SysDept entity = new SysDept();
         BeanUtil.copyProperties(dto, entity);
         // 部门logo
         if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
@@ -83,14 +85,14 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public void removeById(long id) {
         // 查询是否有下级部门
-        var wrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id);
-        var count = baseMapper.selectCount(wrapper);
+        LambdaQueryWrapper<SysDept> wrapper = Wrappers.<SysDept>lambdaQuery().eq(SysDept::getParentId, id);
+        Integer count = baseMapper.selectCount(wrapper);
         if (count > 0) {
             throw new BusinessException(ResultEnum.B000010);
         }
         // 查询部门是否有关联用户
-        var queryWrapper = Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id);
-        var userCount = userMapper.selectCount(queryWrapper);
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery().eq(SysUser::getDeptId, id);
+        Integer userCount = userMapper.selectCount(queryWrapper);
         if (userCount > 0) {
             throw new BusinessException(ResultEnum.B000011);
         }

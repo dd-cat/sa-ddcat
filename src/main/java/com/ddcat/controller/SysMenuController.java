@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 菜单
@@ -42,7 +43,7 @@ public class SysMenuController {
     @GetMapping("tree")
     @SaCheckLogin
     public List<Tree<Long>> tree() {
-        var all = new HashSet<>(service.list());
+        Set<SysMenu> all = new HashSet<>(service.list());
         return service.tree(all);
     }
 
@@ -52,7 +53,7 @@ public class SysMenuController {
     @PostMapping
     @SaCheckPermission({"sys:menu:add", "sys:menu:edit"})
     public void saveOrUpdate(@Valid @RequestBody MenuDTO dto) {
-        var entity = new SysMenu();
+        SysMenu entity = new SysMenu();
         BeanUtils.copyProperties(dto, entity);
         service.saveOrUpdate(entity);
     }

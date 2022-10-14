@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   profiles:
-    active: @active@
+    active: pord
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -37,12 +37,12 @@ sa-token:
 ddcat:
   upload:
     # 访问前缀
-    prefix: http://192.168.164.128/file/
+    prefix: http://101.34.1.133/file/
     # 服务器存储路径
     path: /data/file/
   # SFTP
   jsch:
-    host: 192.168.164.128
+    host: 101.34.1.133
     port: 22
     user: root
     password: 123456
